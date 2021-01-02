@@ -62,24 +62,24 @@ static void fp_prime_set(const bn_t p) {
 
 		bn_copy(&(ctx->prime), p);
 
-		#if FP_RDC == MONTY || !defined(STRIP)
+#if FP_RDC == MONTY || !defined(STRIP)
 
 		bn_mod_pre_monty(t, &(ctx->prime));
 		ctx->u = t->dp[0];
 
-		/* compute R mod p */
-		bn_set_dig(&(ctx->one), 1);
-		bn_lsh(&(ctx->one), &(ctx->one), ctx->prime.used * RLC_DIG);
+		/* Compute R mod p */
+		bn_set_2b(&(ctx->one), ctx->prime.used * RLC_DIG);
 		bn_mod(&(ctx->one), &(ctx->one), &(ctx->prime));
 
-		/* compute the R^2 mod p */
-		fp_add(r, ctx->one.dp, ctx->one.dp);
-		bn_set_dig(t, RLC_FP_DIGS * RLC_DIG);
-		fp_exp(ctx->conv.dp, r, t );
+		/* Compute R^2 mod p */
+		fp_dbl(ctx->conv.dp, ctx->one.dp);
+		bn_set_dig(t, RLC_FP_DIGS);
+		bn_lsh(t, t, RLC_DIG_LOG);
+		fp_exp(ctx->conv.dp, ctx->conv.dp, t);
 		ctx->conv.used = RLC_FP_DIGS;
 		bn_trim(&(ctx->conv));
 
-		#endif /* FP_RDC == MONTY */
+#endif /* FP_RDC == MONTY */
 
 		/* Now look for proper quadratic/cubic non-residues. */
 		ctx->qnr = ctx->cnr = 0;
