@@ -600,7 +600,7 @@ void bn_neg2_low(dig_t *c, const dig_t *a, int sign) {
     }
 }
 
-void fp_inv_jmpds(fp_t c, fp_t a) {
+void fp_inv_jmpds(fp_t c, const fp_t a) {
 	dis_t m[4];
 	/* Compute number of iterations based on modulus size. */
 #if FP_PRIME < 46
