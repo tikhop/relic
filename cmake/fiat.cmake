@@ -28,7 +28,8 @@ foreach(MATCH ${MATCHES})
 	endif()
 endforeach()
 
-execute_process(COMMAND $ENV{FIAT_CRYPTO}/${MONT} fp 64 "0x${PRIME}" OUTPUT_FILE ${FIAT_FP})
+execute_process(COMMAND bash "-c" "echo 'ibase=16; ${PRIME}' | BC_LINE_LENGTH=0 bc" OUTPUT_VARIABLE PRIME)
+execute_process(COMMAND $ENV{FIAT_CRYPTO}/${MONT} fp 64 ${PRIME} OUTPUT_FILE ${FIAT_FP})
 
 file(READ ${FIAT_FP} OUTPUT_CONTENT)
 string(REPLACE "void" "static void" OUTPUT_FIXED "${OUTPUT_CONTENT}")
