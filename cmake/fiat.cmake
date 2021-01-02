@@ -29,7 +29,7 @@ foreach(MATCH ${MATCHES})
 endforeach()
 
 execute_process(COMMAND bash "-c" "echo 'ibase=16; ${PRIME}' | BC_LINE_LENGTH=0 bc" OUTPUT_VARIABLE PRIME)
-#execute_process(COMMAND $ENV{FIAT_CRYPTO}/${MONT} "--static" fp 64 ${PRIME} OUTPUT_FILE ${FIAT_FP})
+execute_process(COMMAND $ENV{FIAT_CRYPTO}/${MONT} "--static" fp 64 ${PRIME} OUTPUT_FILE ${FIAT_FP})
 
 configure_file(${FIAT_LOW}/relic_fp_add_low.tmpl ${FIAT_LOW}/relic_fp_add_low.c COPYONLY)
 configure_file(${FIAT_LOW}/relic_fp_mul_low.tmpl ${FIAT_LOW}/relic_fp_mul_low.c COPYONLY)
