@@ -93,29 +93,28 @@ ull_t arch_cycles(void) {
 
 unsigned int arch_lzcnt() {
     static const uint8_t table[16] = {
-    	0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4
+    	4, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0
     };
 #if WSIZE == 8
 	if (a >> 4 == 0) {
-		return table[a & 0xF];
+		return table[a & 0xF] + 4;
 	} else {
-		return table[a >> 4] + 4;
+		return table[a >> 4];
 	}
 	return 0;
 #elif WSIZE == 16
 	int offset;
 
 	if (a >= ((dig_t)1 << 8)) {
-		offset = 8;
-	} else {
 		offset = 0;
-	}
-	a = a >> offset;
-	if (a >> 4 == 0) {
-		return table[a & 0xF] + offset;
+		a = a >> 8;
 	} else {
-		return table[a >> 4] + 4 + offset;
+		offset = 8;
 	}
-	return 0;
+	if (a >> 4 == 0) {
+		return table[a & 0xF] + 4 + offset;
+	} else {
+		return table[a >> 4] + offset;
+	}
 #endif
 }
