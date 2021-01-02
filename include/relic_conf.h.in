@@ -254,6 +254,8 @@
 #define EXGCD    4
 /** Constant-time inversion by Bernstein-Yang division steps. */
 #define DIVST    5
+/** Constant-time inversion by Bernstein-Yang jump division steps. */
+#define JMPDS    6
 /** Use implementation provided by the lower layer. */
 #define LOWER    8
 /** Chosen prime field inversion method. */

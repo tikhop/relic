@@ -36,6 +36,7 @@ message("      FP_METHD=BINAR    Binary Inversion algorithm.")
 message("      FP_METHD=MONTY    Montgomery inversion.")
 message("      FP_METHD=EXGCD    Inversion by the Extended Euclidean algorithm.")
 message("      FP_METHD=DIVST    Constant-time inversion by division steps.")
+message("      FP_METHD=JMPDS    Constant-time inversion by jump division steps.")
 message("      FP_METHD=LOWER    Pass inversion to the lower level.\n")
 
 message("      Field exponentiation")
