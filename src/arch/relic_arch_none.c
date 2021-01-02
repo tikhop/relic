@@ -62,15 +62,15 @@ unsigned int arch_lzcnt(dig_t a) {
 	int offset;
 
 	if (a >= ((dig_t)1 << 8)) {
-		offset = 8;
-	} else {
 		offset = 0;
-	}
-	a = a >> offset;
-	if (a >> 4 == 0) {
-		return table[a & 0xF] + offset;
+		a = a >> 8;
 	} else {
-		return table[a >> 4] + 4 + offset;
+		offset = 8;
+	}
+	if (a >> 4 == 0) {
+		return table[a & 0xF] + 4 + offset;
+	} else {
+		return table[a >> 4] + offset;
 	}
 	return 0;
 #elif WSIZE == 32
