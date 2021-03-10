@@ -83,7 +83,7 @@ static void fp_prime_set(const bn_t p) {
 #if FP_PRIME < 46
 	int d = (WSIZE - 2) * RLC_CEIL((49 * FP_PRIME + 80)/17, WSIZE - 2);
 #else
-	int d = (WSIZE - 2) * RLC_CEIL((49 * FP_PRIME + 57)/17, WSIZE - 2);
+	int d = (WSIZE - 2) * RLC_CEIL(RLC_CEIL(3787 * FP_PRIME + 2166, 1644), WSIZE - 2);
 #endif
 
 #if WSIZE == 8
