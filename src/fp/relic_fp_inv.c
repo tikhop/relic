@@ -406,9 +406,9 @@ void fp_inv_exgcd(fp_t c, const fp_t a) {
 void fp_inv_divst(fp_t c, const fp_t a) {
 	/* Compute number of iterations based on modulus size. */
 #if FP_PRIME < 46
-	int d = (WSIZE - 2) * RLC_CEIL((49 * FP_PRIME + 80)/17, WSIZE - 2);
+	int d = (WSIZE - 2) * RLC_CEIL((49 * FP_PRIME + 80) / 17, WSIZE - 2);
 #else
-	int d = (WSIZE - 2) * RLC_CEIL((49 * FP_PRIME + 57)/17, WSIZE - 2);
+	int d = (WSIZE - 2) * RLC_CEIL(RLC_CEIL(3787 * FP_PRIME + 2166, 1644), WSIZE - 2);
 #endif
 	int g0, d0;
 	dig_t fs, gs, delta = 1;
@@ -502,11 +502,11 @@ void fp_inv_divst(fp_t c, const fp_t a) {
 #if FP_INV == JUMPDS || !defined(STRIP)
 
 static void jumpdivstep(dis_t m[4], int *delta, dis_t f, dis_t g, int s) {
-    dis_t u = (dis_t)1, v = 0, q = 0, r = (dis_t)1, t;
+	dis_t u = (dis_t)1, v = 0, q = 0, r = (dis_t)1, t;
 
     for (s--; s >= 0; s--) {
         int g0 = ((*delta) > 0) && (g & 1);
-        *delta = -g0 * (*delta);
+		*delta = RLC_SEL(2 + *delta, 2 - *delta, g0);
         t = -f;
         f = RLC_SEL(f, g, g0);
         g = RLC_SEL(g, t, g0);
@@ -517,17 +517,16 @@ static void jumpdivstep(dis_t m[4], int *delta, dis_t f, dis_t g, int s) {
         v = RLC_SEL(v, r, g0);
         r = RLC_SEL(r, t, g0);
         g0 = g & 1;
-        (*delta)++;
-        g = (g + g0*f) >> (dis_t)1;
-        q = (q + g0*u);
+		g = (g + g0*f) >> (dis_t)1;
+		q = (q + g0*u);
         r = (r + g0*v);
 		u += u;
 		v += v;
-    }
-    m[0] = u;
-    m[1] = v;
-    m[2] = q;
-    m[3] = r;
+	}
+	m[0] = u;
+	m[1] = v;
+	m[2] = q;
+	m[3] = r;
 }
 
 static void bn_muls_low(dig_t *c, const dig_t *a, dis_t digit, int size) {
@@ -581,9 +580,9 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 	dis_t m[4];
 	/* Compute number of iterations based on modulus size. */
 #if FP_PRIME < 46
-	int i, j, d = 1, s = RLC_DIG - 2, iterations = (49 * FP_PRIME + 80)/17;
+	int i, j, d = 1, s = RLC_DIG - 2, iterations = (49 * FP_PRIME + 80) / 17;
 #else
-	int i, j, d = 1, s = RLC_DIG - 2, iterations = (49 * FP_PRIME + 57)/17;
+	int i, j, d = 1, s = RLC_DIG - 2, iterations = RLC_CEIL(3787 * FP_PRIME + 2166, 1644);
 #endif
 	dv_t f, g, t, p, t0, t1, u0, u1, v0, v1, p01, p11;
 	fp_t pre;
@@ -629,11 +628,11 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 		dv_zero(v0, 2 * RLC_FP_DIGS);
 		dv_zero(v1, 2 * RLC_FP_DIGS);
 
-	    dv_copy(f, fp_prime_get(), RLC_FP_DIGS);
-	    dv_copy(p + 1, fp_prime_get(), RLC_FP_DIGS);
+		dv_copy(f, fp_prime_get(), RLC_FP_DIGS);
+		dv_copy(p + 1, fp_prime_get(), RLC_FP_DIGS);
 		/* Convert a from Montgomery form. */
-	    fp_copy(t, a);
-	    fp_rdcn_low(g, t);
+		fp_copy(t, a);
+		fp_rdcn_low(g, t);
 
 		jumpdivstep(m, &d, f[0], g[0], s);
 
@@ -660,7 +659,7 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 		dv_copy(p11, u1, 2 * RLC_FP_DIGS);
 		dv_copy(p01, v1, 2 * RLC_FP_DIGS);
 
-	    for (i = 1, j = 0; i < RLC_CEIL(iterations, s); i++) {
+		for (i = 1, j = 0; i < RLC_CEIL(iterations, s); i++) {
 			jumpdivstep(m, &d, f[0], g[0], s);
 
 			bn_mul2_low(t0, f, m[0]);
@@ -669,38 +668,42 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 
 			bn_mul2_low(f, f, m[2]);
 			bn_mul2_low(t1, g, m[3]);
-	        bn_addn_low(t1, t1, f, RLC_FP_DIGS + 1);
+			bn_addn_low(t1, t1, f, RLC_FP_DIGS + 1);
 
 			/* Update f and g. */
-	        bn_rsh2_low(f, t0, RLC_FP_DIGS + 1, s);
-	        bn_rsh2_low(g, t1, RLC_FP_DIGS + 1, s);
+			bn_rsh2_low(f, t0, RLC_FP_DIGS + 1, s);
+			bn_rsh2_low(g, t1, RLC_FP_DIGS + 1, s);
 
 			p[j] = 0;
 			dv_copy(p + j + 1, fp_prime_get(), RLC_FP_DIGS);
 
-	        /* Update column vector below. */
-	        bn_muls_low(v0, p01, m[0], RLC_FP_DIGS + j);
-	        fp_subd_low(t, p, v0);
-	        dv_copy_cond(v0, t, RLC_FP_DIGS + j + 1, (dig_t)m[0] >> (RLC_DIG - 1));
+			/* Update column vector below. */
+			bn_muls_low(v0, p01, m[0], RLC_FP_DIGS + j);
+			fp_subd_low(t, p, v0);
+			dv_copy_cond(v0, t, RLC_FP_DIGS + j + 1,
+					(dig_t)m[0] >> (RLC_DIG - 1));
 
-	        bn_muls_low(v1, p11, m[1], RLC_FP_DIGS + j);
-	        fp_subd_low(t, p, v1);
-	        dv_copy_cond(v1, t, RLC_FP_DIGS + j + 1, (dig_t)m[1] >> (RLC_DIG - 1));
+			bn_muls_low(v1, p11, m[1], RLC_FP_DIGS + j);
+			fp_subd_low(t, p, v1);
+			dv_copy_cond(v1, t, RLC_FP_DIGS + j + 1,
+					(dig_t)m[1] >> (RLC_DIG - 1));
 
-	        bn_muls_low(u0, p01, m[2], RLC_FP_DIGS + j);
-	        fp_subd_low(t, p, u0);
-	        dv_copy_cond(u0, t, RLC_FP_DIGS + j + 1, (dig_t)m[2] >> (RLC_DIG - 1));
+			bn_muls_low(u0, p01, m[2], RLC_FP_DIGS + j);
+			fp_subd_low(t, p, u0);
+			dv_copy_cond(u0, t, RLC_FP_DIGS + j + 1,
+					(dig_t)m[2] >> (RLC_DIG - 1));
 
-	        bn_muls_low(u1, p11, m[3], RLC_FP_DIGS + j);
-	        fp_subd_low(t, p, u1);
-	        dv_copy_cond(u1, t, RLC_FP_DIGS + j + 1, (dig_t)m[3] >> (RLC_DIG - 1));
+			bn_muls_low(u1, p11, m[3], RLC_FP_DIGS + j);
+			fp_subd_low(t, p, u1);
+			dv_copy_cond(u1, t, RLC_FP_DIGS + j + 1,
+					(dig_t)m[3] >> (RLC_DIG - 1));
 
 			j = i % RLC_FP_DIGS;
 			if (j == 0) {
-		        fp_addd_low(t, u0, u1);
+				fp_addd_low(t, u0, u1);
 				fp_rdcn_low(p11, t);
-		        fp_addd_low(t, v0, v1);
-		        fp_rdcn_low(p01, t);
+				fp_addd_low(t, v0, v1);
+				fp_rdcn_low(p01, t);
 				dv_zero(v0, 2 * RLC_FP_DIGS);
 				dv_zero(v1, 2 * RLC_FP_DIGS);
 				fp_mulm_low(pre, pre, core_get()->conv.dp);
@@ -708,17 +711,19 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 				fp_addd_low(p11, u0, u1);
 				fp_addd_low(p01, v0, v1);
 			}
-	    }
-	    /* Negate based on sign of f at the end. */
+		}
+		/* Negate based on sign of f at the end. */
 		fp_rdcn_low(p01, p01);
-	    fp_negm_low(t, p01);
-	    dv_copy_cond(p01, t, RLC_FP_DIGS, f[RLC_FP_DIGS] >> (RLC_DIG - 1));
+		fp_negm_low(t, p01);
+		dv_copy_cond(p01, t, RLC_FP_DIGS, f[RLC_FP_DIGS] >> (RLC_DIG - 1));
 		/* Multiply by (precomp * R^j) % p, one for each iteration of the loop,
-		   one for the constant, one more to be removed by reduction. */
-	    fp_mulm_low(c, p01, pre);
-	} RLC_CATCH_ANY {
+		 * one for the constant, one more to be removed by reduction. */
+		fp_mulm_low(c, p01, pre);
+	}
+	RLC_CATCH_ANY {
 		RLC_THROW(ERR_CAUGHT);
-	} RLC_FINALLY {
+	}
+	RLC_FINALLY {
 		dv_free(t0);
 		dv_free(f);
 		dv_free(t);
