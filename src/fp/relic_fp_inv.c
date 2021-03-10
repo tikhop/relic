@@ -404,7 +404,7 @@ void fp_inv_divst(fp_t c, const fp_t a) {
 #if FP_PRIME < 46
 	int d = (WSIZE - 2) * RLC_CEIL((49 * FP_PRIME + 80) / 17, WSIZE - 2);
 #else
-	int d = (WSIZE - 2) * RLC_CEIL(RLC_CEIL(3787 * FP_PRIME + 2166, 1644), WSIZE - 2);
+	int d = (WSIZE - 2) * RLC_CEIL((49 * FP_PRIME + 57) / 17, WSIZE - 2);
 #endif
 	int g0, d0;
 	dig_t fs, gs, delta = 1;
@@ -440,6 +440,9 @@ void fp_inv_divst(fp_t c, const fp_t a) {
 		dv_copy(g, _t->dp, _t->used);
 		dv_copy(f, fp_prime_get(), RLC_FP_DIGS);
 		fs = gs = RLC_POS;
+
+		/* Compute missing iterations from the constant. */
+		int gap = d - (WSIZE - 2) * RLC_CEIL(RLC_CEIL(3787 * FP_PRIME + 2166, 1644), WSIZE - 2);
 
 		for (int i = 0; i < d; i++) {
 			g0 = g[0] & 1;
@@ -478,7 +481,15 @@ void fp_inv_divst(fp_t c, const fp_t a) {
 		}
 		fp_neg(t, v);
 		dv_copy_cond(v, t, RLC_FP_DIGS, fs);
-		fp_mul(c, v, core_get()->inv.dp);
+
+		dv_zero(t, 2 * RLC_FP_DIGS);
+		fp_add_dig(t, fp_prime_get(), 1);
+		fp_hlv(t, t);
+		bn_set_dig(_t, gap);
+		fp_exp(t, t, _t);
+		fp_mul(t, t, core_get()->inv.dp);
+
+		fp_mul(c, v, t);
 	} RLC_CATCH_ANY {
 		RLC_THROW(ERR_CAUGHT)
 	} RLC_FINALLY {
@@ -499,22 +510,24 @@ void fp_inv_divst(fp_t c, const fp_t a) {
 static void jumpdivstep(dis_t m[4], int *delta, dis_t f, dis_t g, int s) {
 	dis_t u = (dis_t)1, v = 0, q = 0, r = (dis_t)1, t;
 
-    for (s--; s >= 0; s--) {
-        int g0 = ((*delta) > 0) && (g & 1);
+	f &= RLC_MASK(s);
+	g &= RLC_MASK(s);
+	for (s--; s >= 0; s--) {
+		int g0 = ((*delta) > 0) && (g & 1);
 		*delta = RLC_SEL(2 + *delta, 2 - *delta, g0);
-        t = -f;
-        f = RLC_SEL(f, g, g0);
-        g = RLC_SEL(g, t, g0);
-        t = -u;
-        u = RLC_SEL(u, q, g0);
-        q = RLC_SEL(q, t, g0);
-        t = -v;
-        v = RLC_SEL(v, r, g0);
-        r = RLC_SEL(r, t, g0);
-        g0 = g & 1;
+		t = -f;
+		f = RLC_SEL(f, g, g0);
+		g = RLC_SEL(g, t, g0);
+		t = -u;
+		u = RLC_SEL(u, q, g0);
+		q = RLC_SEL(q, t, g0);
+		t = -v;
+		v = RLC_SEL(v, r, g0);
+		r = RLC_SEL(r, t, g0);
+		g0 = g & 1;
 		g = (g + g0*f) >> (dis_t)1;
 		q = (q + g0*u);
-        r = (r + g0*v);
+		r = (r + g0*v);
 		u += u;
 		v += v;
 	}
@@ -625,9 +638,13 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 
 		dv_copy(f, fp_prime_get(), RLC_FP_DIGS);
 		dv_copy(p + 1, fp_prime_get(), RLC_FP_DIGS);
+#if FP_RDC == MONTY
 		/* Convert a from Montgomery form. */
 		fp_copy(t, a);
 		fp_rdcn_low(g, t);
+#else
+		fp_copy(g, a);
+#endif
 
 		jumpdivstep(m, &d, f[0], g[0], s);
 
