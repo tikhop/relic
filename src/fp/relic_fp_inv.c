@@ -618,7 +618,7 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 		dv_new(p11);
 		fp_new(pre);
 
-#ifdef RLC_FP_ROOM
+#if (FP_PRIME % WSIZE) != 0
 		int j = 0;
 		fp_copy(pre, core_get()->inv.dp);
 #else
@@ -686,7 +686,7 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 			bn_rsh2_low(f, t0, RLC_FP_DIGS + 1, s);
 			bn_rsh2_low(g, t1, RLC_FP_DIGS + 1, s);
 
-#ifdef RLC_FP_ROOM
+#if (FP_PRIME % WSIZE) != 0
 			p[j] = 0;
 			dv_copy(p + j + 1, fp_prime_get(), RLC_FP_DIGS);
 
@@ -767,7 +767,7 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 		bn_rsh2_low(f, t0, RLC_FP_DIGS + 1, s);
 		bn_rsh2_low(g, t1, RLC_FP_DIGS + 1, s);
 
-#ifdef RLC_FP_ROOM
+#if (FP_PRIME % WSIZE) != 0
 		p[j] = 0;
 		dv_copy(p + j + 1, fp_prime_get(), RLC_FP_DIGS);
 
@@ -797,20 +797,8 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 		fp_subd_low(t, p, v1);
 		dv_copy_cond(v1, t, 2 * RLC_FP_DIGS, (dig_t)m[1] >> (RLC_DIG - 1));
 
-		bn_muls_low(u0, p01, m[2], 2 * RLC_FP_DIGS);
-		fp_subd_low(t, p, u0);
-		dv_copy_cond(u0, t, 2 * RLC_FP_DIGS, (dig_t)m[2] >> (RLC_DIG - 1));
-
-		bn_muls_low(u1, p11, m[3], 2 * RLC_FP_DIGS);
-		fp_subd_low(t, p, u1);
-		dv_copy_cond(u1, t, 2 * RLC_FP_DIGS, (dig_t)m[3] >> (RLC_DIG - 1));
-
-		fp_addc_low(t, u0, u1);
-		fp_rdcn_low(p11, t);
 		fp_addc_low(t, v0, v1);
 		fp_rdcn_low(p01, t);
-		fp_mulm_low(pre, pre, core_get()->conv.dp);
-		fp_rdcn_low(p01, p01);
 #endif
 
 		/* Negate based on sign of f at the end. */
