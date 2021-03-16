@@ -150,7 +150,7 @@ void bench_before(void) {
 
 void bench_after(void) {
 	ctx_t *ctx = core_get();
-	long long result;
+	long long result = 0;
 
 #if OPSYS == DUINO && TIMER == HREAL
 	core_get()->after = micros();
