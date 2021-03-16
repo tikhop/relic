@@ -72,6 +72,8 @@ static void fp_prime_set(const bn_t p) {
 		bn_mod(&(ctx->one), &(ctx->one), &(ctx->prime));
 
 		/* Compute R^2 mod p */
+		ctx->conv.used = RLC_FP_DIGS;
+		dv_zero(ctx->conv.dp, RLC_FP_DIGS);
 		bn_sqr(&(ctx->conv), &ctx->one);
 		bn_mod(&(ctx->conv), &(ctx->conv), &(ctx->prime));
 
