@@ -94,7 +94,8 @@ static void fp_prime_set(const bn_t p) {
 		fp_exp(ctx->inv.dp, ctx->inv.dp, t);
 
 #if FP_RDC == MONTY
-#ifdef RLC_FP_ROOM
+
+#if (FP_PRIME % WSIZE) != 0
 		fp_mul(ctx->inv.dp, ctx->inv.dp, ctx->conv.dp);
 		fp_mul(ctx->inv.dp, ctx->inv.dp, ctx->conv.dp);
 
@@ -184,7 +185,7 @@ void fp_prime_init(void) {
 #if FP_RDC == MONTY || !defined(STRIP)
 	bn_init(&(ctx->conv), RLC_FP_DIGS);
 	bn_init(&(ctx->one), RLC_FP_DIGS);
-#if FP_INV == DIVST || FP_INV == JUMPDS || !defined(STRIP)
+#if FP_INV == JUMPDS || !defined(STRIP)
 	bn_init(&(ctx->inv), RLC_FP_DIGS);
 #endif
 #endif
@@ -199,7 +200,7 @@ void fp_prime_clean(void) {
 		memset(ctx->sps, 0, sizeof(ctx->sps));
 #endif
 #if FP_RDC == MONTY || !defined(STRIP)
-#if FP_INV == DIVST || FP_INV == JUMPDS || !defined(STRIP)
+#if FP_INV == JUMPDS || !defined(STRIP)
 		bn_clean(&(ctx->inv));
 #endif
 		bn_clean(&(ctx->one));
