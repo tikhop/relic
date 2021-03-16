@@ -72,19 +72,12 @@ static void fp_prime_set(const bn_t p) {
 		bn_mod(&(ctx->one), &(ctx->one), &(ctx->prime));
 
 		/* Compute R^2 mod p */
-		ctx->conv.used = RLC_FP_DIGS;
-		fp_dbl(ctx->conv.dp, ctx->one.dp);
-		bn_set_dig(t, RLC_FP_DIGS);
-		bn_lsh(t, t, RLC_DIG_LOG);
-		fp_exp(ctx->conv.dp, ctx->conv.dp, t);
+		bn_sqr(&(ctx->conv), &ctx->one);
+		bn_mod(&(ctx->conv), &(ctx->conv), &(ctx->prime));
 
-#if FP_INV == DIVST || FP_INV == JUMPDS || !defined(STRIP)
+#if FP_INV == JUMPDS || !defined(STRIP)
 
-#if FP_PRIME < 46
-	int d = (WSIZE - 2) * RLC_CEIL((49 * FP_PRIME + 80)/17, WSIZE - 2);
-#else
-	int d = (WSIZE - 2) * RLC_CEIL(RLC_CEIL(3787 * FP_PRIME + 2166, 1644), WSIZE - 2);
-#endif
+		int d = (45907 * FP_PRIME + 26313) / 19929;
 
 #if WSIZE == 8
 		bn_set_dig(t, d >> 8);
@@ -97,6 +90,20 @@ static void fp_prime_set(const bn_t p) {
 		fp_add_dig(ctx->inv.dp, fp_prime_get(), 1);
 		fp_hlv(ctx->inv.dp, ctx->inv.dp);
 		fp_exp(ctx->inv.dp, ctx->inv.dp, t);
+
+#if FP_RDC == MONTY
+#ifdef RLC_FP_ROOM
+		fp_mul(ctx->inv.dp, ctx->inv.dp, ctx->conv.dp);
+		fp_mul(ctx->inv.dp, ctx->inv.dp, ctx->conv.dp);
+
+		for (int i = 1, j = 0; i < d / (WSIZE - 2); i++) {
+			j = i % RLC_FP_DIGS;
+			if (j == 0) {
+				fp_mulm_low(ctx->inv.dp, ctx->inv.dp, ctx->conv.dp);
+			}
+		}
+#endif
+#endif
 
 #endif /* FP_INV */
 
