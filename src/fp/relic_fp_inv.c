@@ -822,11 +822,17 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 	RLC_FINALLY {
 		dv_free(t0);
 		dv_free(f);
-		dv_free(g);
 		dv_free(t);
-		fp_free(v);
-		fp_free(r);
-		fp_free(precomp);
+		dv_free(p);
+		dv_free(g);
+		dv_free(t1);
+		dv_free(u0);
+		dv_free(u1);
+		dv_free(v0);
+		dv_free(v1);
+		dv_free(p01);
+		dv_free(p11);
+		fp_free(pre);
 	}
 }
 
