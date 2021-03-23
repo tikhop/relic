@@ -501,25 +501,32 @@ void fp_inv_divst(fp_t c, const fp_t a) {
 
 #if FP_INV == JUMPDS || !defined(STRIP)
 
-static void jumpdivstep(dis_t m[4], int *delta, dis_t f, dis_t g, int s) {
-	dis_t u = (dis_t)1, v = 0, q = 0, r = (dis_t)1, t;
+static int jumpdivstep(dis_t m[4], dis_t delta, dig_t f, dig_t g, int s) {
+	dig_t u = 1, v = 0, q = 0, r = 1, c0, c1, _f, _u, _v;
 
+	/* This is actually faster than my previous version, several tricks from
+	 * https://github.com/bitcoin-core/secp256k1/blob/master/src/modinv64_impl.h
+	 */
 	for (s--; s >= 0; s--) {
-		int g0 = ((*delta) > 0) && (g & 1);
-		*delta = RLC_SEL(2 + *delta, 2 - *delta, g0);
-		t = -f;
-		f = RLC_SEL(f, g, g0);
-		g = RLC_SEL(g, t, g0);
-		t = -u;
-		u = RLC_SEL(u, q, g0);
-		q = RLC_SEL(q, t, g0);
-		t = -v;
-		v = RLC_SEL(v, r, g0);
-		r = RLC_SEL(r, t, g0);
-		g0 = g & 1;
-		g = (g + g0*f) >> (dis_t)1;
-		q = (q + g0*u);
-		r = (r + g0*v);
+		/* First handle the else part: if delta < 0, compute -(f,u,v). */
+		c0 = delta >> (RLC_DIG - 1);
+		/* Super clever trick to negate in two's complement. */
+		_f = (f ^ c0) - c0;
+		_u = (u ^ c0) - c0;
+		_v = (v ^ c0) - c0;
+		/* Conditionally add -(f,u,v) to (g,q,r) */
+		c1 = -(g & 1);
+		g = g + (_f & c1);
+		q = q + (_u & c1);
+		r = r + (_v & c1);
+		/* Now handle the 'if' part, so c0 will be (delta < 0) && (g & 1)) */
+		c0 &= c1;
+		/* delta = RLC_SEL(delta, -delta, c0 & 1) - 2 (for half-divstep) */
+		delta = (delta ^ c0) - c0 - 2;
+		f = f + (g & c0);
+		u = u + (q & c0);
+		v = v + (r & c0);
+		g >>= 1;
 		u += u;
 		v += v;
 	}
@@ -527,6 +534,7 @@ static void jumpdivstep(dis_t m[4], int *delta, dis_t f, dis_t g, int s) {
 	m[1] = v;
 	m[2] = q;
 	m[3] = r;
+	return delta;
 }
 
 static void bn_muls_low(dig_t *c, const dig_t *a, dis_t digit, int size) {
@@ -641,7 +649,7 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 #else
 		fp_copy(g, a);
 #endif
-		jumpdivstep(m, &d, f[0] & RLC_MASK(s), g[0] & RLC_MASK(s), s);
+		d = jumpdivstep(m, d, f[0] & RLC_MASK(s), g[0] & RLC_MASK(s), s);
 
 		bn_mul2_low(t0, f, RLC_POS, m[0]);
 		bn_mul2_low(t1, g, RLC_POS, m[1]);
@@ -667,7 +675,7 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 		dv_copy(p11, u1, 2 * RLC_FP_DIGS);
 
 		for (i = 1; i < iterations / s; i++) {
-			jumpdivstep(m, &d, f[0] & RLC_MASK(s), g[0] & RLC_MASK(s), s);
+			d = jumpdivstep(m, d, f[0] & RLC_MASK(s), g[0] & RLC_MASK(s), s);
 
 			bn_mul2_low(t0, f, f[RLC_FP_DIGS - 1] >> (RLC_DIG - 1), m[0]);
 			bn_mul2_low(t1, g, g[RLC_FP_DIGS - 1] >> (RLC_DIG - 1), m[1]);
@@ -748,7 +756,7 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 		}
 
 		s = iterations % s;
-		jumpdivstep(m, &d, f[0] & RLC_MASK(s), g[0] & RLC_MASK(s), s);
+		d = jumpdivstep(m, d, f[0] & RLC_MASK(s), g[0] & RLC_MASK(s), s);
 
 		bn_mul2_low(t0, f, f[RLC_FP_DIGS - 1] >> (RLC_DIG - 1), m[0]);
 		bn_mul2_low(t1, g, g[RLC_FP_DIGS - 1] >> (RLC_DIG - 1), m[1]);
@@ -809,14 +817,11 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 	RLC_FINALLY {
 		dv_free(t0);
 		dv_free(f);
-		dv_free(t);
-		dv_free(p);
 		dv_free(g);
-		dv_free(t1);
-		dv_free(u0);
-		dv_free(u1);
-		dv_free(p01);
-		dv_free(p11);
+		dv_free(t);
+		fp_free(v);
+		fp_free(r);
+		fp_free(precomp);
 	}
 }
 
