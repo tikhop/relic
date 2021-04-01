@@ -857,7 +857,7 @@ static int inversion(void) {
 #endif
 
 #if FP_INV == DIVST || !defined(STRIP)
-		TEST_BEGIN("jump division step inversion is correct") {
+		TEST_CASE("jump division step inversion is correct") {
 			do {
 				fp_rand(a);
 			} while (fp_is_zero(a));
