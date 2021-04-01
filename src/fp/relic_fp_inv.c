@@ -543,7 +543,8 @@ static int jumpdivstep(dis_t m[4], dis_t delta, dig_t f, dig_t g, int s) {
 }
 
 static void bn_muls_low(dig_t *c, const dig_t *a, dis_t digit, int size) {
-	digit = RLC_SEL(digit, -digit, (dig_t)digit >> (RLC_DIG - 1));
+	int sd = digit >> (RLC_DIG - 1);
+	digit = (digit ^ sd) - sd;
 	c[size] = bn_mul1_low(c, a, digit, size);
 }
 
@@ -564,28 +565,28 @@ static dig_t bn_rsh2_low(dig_t *c, const dig_t *a, int size, int bits) {
 }
 
 static void bn_mul2_low(dig_t *c, const dig_t *a, int sa, dis_t digit) {
-	int i;
-	int sd = (dig_t)digit >> (RLC_DIG - 1);
-	int sign = sa ^ sd;
-	dig_t _a, _c, c0, c1;
+	int i, sign, sd = digit >> (RLC_DIG - 1);
+	dig_t _c, c0, c1;
 	dbl_t r;
 
-	digit = RLC_SEL(digit, -digit, sd);
-	_a = RLC_SEL(a[0], ~a[0], sa);
-	r = (dbl_t)(_a + sa) * digit;
-	_c = RLC_SEL((dig_t)r, ~(dig_t)r, sign);
-	c[0] = _c + sign;
+	sa = -sa;
+	sign = sa ^ sd;
+	digit = (digit ^ sd) - sd;
+
+	r = (dbl_t)((a[0] ^ sa) - sa) * digit;
+	_c = ((dig_t)r) ^ sign;
+	c[0] = _c - sign;
+
 	c0 = ((dbl_t)r >> RLC_DIG);
 	c1 = (c[0] < _c);
 	for (i = 1; i < RLC_FP_DIGS; i++) {
-		_a = RLC_SEL(a[i], ~a[i], sa);
-		r = _a * (dbl_t)digit + c0;
-		_c = RLC_SEL((dig_t)r, ~(dig_t)r, sign);
+		r = (a[i] ^ sa) * (dbl_t)digit + c0;
+		_c = (dig_t)r ^ sign;
 		c[i] = _c + c1;
 		c1 = (c[i] < _c);
 		c0 = ((dbl_t)r >> RLC_DIG);
 	}
-	c[i] = c1 + RLC_SEL((dig_t)c0, ~(dig_t)c0, sign);
+	c[i] = (c0 ^ sign) + c1;
 }
 
 void fp_inv_jmpds(fp_t c, const fp_t a) {
