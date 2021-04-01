@@ -527,7 +527,7 @@ static void arith(void) {
 #endif
 
 #if FP_INV == JMPDS || !defined(STRIP)
-	BENCH_BEGIN("fp_inv_jmpds") {
+	BENCH_RUN("fp_inv_jmpds") {
 		fp_rand(a);
 		BENCH_ADD(fp_inv_jmpds(c, a));
 	}
