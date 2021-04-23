@@ -507,27 +507,24 @@ void fp_inv_divst(fp_t c, const fp_t a) {
 #if FP_INV == JUMPDS || !defined(STRIP)
 
 static int jumpdivstep(dis_t m[4], dis_t delta, dig_t f, dig_t g, int s) {
-	dig_t u = 1, v = 0, q = 0, r = 1, c0, c1, _f, _u, _v;
+	dig_t u = 8, v = 0, q = 0, r = 8, c0, c1;
 
 	/* This is actually faster than my previous version, several tricks from
 	 * https://github.com/bitcoin-core/secp256k1/blob/master/src/modinv64_impl.h
 	 */
-	for (s--; s >= 0; s--) {
+	for (s--; s > 2; s--) {
 		/* First handle the else part: if delta < 0, compute -(f,u,v). */
 		c0 = delta >> (RLC_DIG - 1);
-		/* Super clever trick to negate in two's complement. */
-		_f = (f ^ c0) - c0;
-		_u = (u ^ c0) - c0;
-		_v = (v ^ c0) - c0;
-		/* Conditionally add -(f,u,v) to (g,q,r) */
 		c1 = -(g & 1);
-		g = g + (_f & c1);
-		q = q + (_u & c1);
-		r = r + (_v & c1);
-		/* Now handle the 'if' part, so c0 will be (delta < 0) && (g & 1)) */
 		c0 &= c1;
-		/* delta = RLC_SEL(delta, -delta, c0 & 1) - 2 (for half-divstep) */
-		delta = (delta ^ c0) - c0 - 2;
+		/* Conditionally add -(f,u,v) to (g,q,r) */
+		g += ((f ^ c0) - c0) & c1;
+		q += ((u ^ c0) - c0) & c1;
+		r += ((v ^ c0) - c0) & c1;
+		/* Now handle the 'if' part, so c0 will be (delta < 0) && (g & 1)) */
+		/* delta = RLC_SEL(delta, -delta, c0 & 1) - 2 (for half-divstep), thus
+		 * delta = - delta - 2 or delta - 1 */
+		delta = (delta ^ c0) - 1;
 		f = f + (g & c0);
 		u = u + (q & c0);
 		v = v + (r & c0);
@@ -592,7 +589,7 @@ static void bn_mul2_low(dig_t *c, const dig_t *a, int sa, dis_t digit) {
 void fp_inv_jmpds(fp_t c, const fp_t a) {
 	dis_t m[4];
 	/* Compute number of iterations based on modulus size. */
-	int i, d = 1, s = RLC_DIG - 2;
+	int i, d = -1, s = RLC_DIG - 2;
 	/* Iterations taken directly from https://github.com/sipa/safegcd-bounds */
 	int iterations = (45907 * FP_PRIME + 26313) / 19929;
 	dv_t f, g, t, p, t0, t1, u0, u1, v0, v1, p01, p11;
