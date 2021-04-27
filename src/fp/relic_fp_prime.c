@@ -100,7 +100,7 @@ static void fp_prime_set(const bn_t p) {
 		fp_mul(ctx->inv.dp, ctx->inv.dp, ctx->conv.dp);
 		fp_mul(ctx->inv.dp, ctx->inv.dp, ctx->conv.dp);
 
-		for (int i = 1, j = 0; i < d / (WSIZE - 2); i++) {
+		for (int i = 1, j = 0; i < d / (RLC_DIG - 2); i++) {
 			j = i % RLC_FP_DIGS;
 			if (j == 0) {
 				fp_mulm_low(ctx->inv.dp, ctx->inv.dp, ctx->conv.dp);

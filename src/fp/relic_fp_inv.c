@@ -507,12 +507,12 @@ void fp_inv_divst(fp_t c, const fp_t a) {
 #if FP_INV == JUMPDS || !defined(STRIP)
 
 static int jumpdivstep(dis_t m[4], dis_t delta, dig_t f, dig_t g, int s) {
-	dig_t u = 8, v = 0, q = 0, r = 8, c0, c1;
+	dig_t u = 1, v = 0, q = 0, r = 1, c0, c1;
 
 	/* This is actually faster than my previous version, several tricks from
 	 * https://github.com/bitcoin-core/secp256k1/blob/master/src/modinv64_impl.h
 	 */
-	for (s--; s > 2; s--) {
+	for (s--; s >= 0; s--) {
 		/* First handle the else part: if delta < 0, compute -(f,u,v). */
 		c0 = delta >> (RLC_DIG - 1);
 		c1 = -(g & 1);
@@ -677,7 +677,10 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 		dv_copy(p01, v1, 2 * RLC_FP_DIGS);
 		dv_copy(p11, u1, 2 * RLC_FP_DIGS);
 
-		for (i = 1; i < iterations / s; i++) {
+		int loops = iterations / (RLC_DIG - 2);
+		loops = (iterations % (RLC_DIG - 2) == 0 ? loops - 1 : loops);
+
+		for (i = 1; i < loops; i++) {
 			d = jumpdivstep(m, d, f[0] & RLC_MASK(s), g[0] & RLC_MASK(s), s);
 
 			bn_mul2_low(t0, f, f[RLC_FP_DIGS - 1] >> (RLC_DIG - 1), m[0]);
@@ -758,7 +761,7 @@ void fp_inv_jmpds(fp_t c, const fp_t a) {
 #endif
 		}
 
-		s = iterations % s;
+		s = iterations - loops * (RLC_DIG - 2);
 		d = jumpdivstep(m, d, f[0] & RLC_MASK(s), g[0] & RLC_MASK(s), s);
 
 		bn_mul2_low(t0, f, f[RLC_FP_DIGS - 1] >> (RLC_DIG - 1), m[0]);
