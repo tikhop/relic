@@ -60,7 +60,7 @@ static int valid_radix(uint_t radix) {
  * @param[in] radix				- the valid radix.
  * @return the logarithm of the radix in basis two.
  */
-static int log_radix(uint_t radix) {
+static uint_t log_radix(uint_t radix) {
 	int l = 0;
 
 	while (radix > 0) {
@@ -201,7 +201,8 @@ void fb_read_str(fb_t a, const char *str, size_t len, uint_t radix) {
 		return;
 	}
 
-	if (RLC_CEIL(l * (len - 1), RLC_DIG) > RLC_FB_DIGS) {
+	j = l * (len - 1);
+	if (len == 0 || RLC_CEIL(j, RLC_DIG) > RLC_FB_DIGS) {
 		RLC_THROW(ERR_NO_BUFFER);
 		return;
 	}
