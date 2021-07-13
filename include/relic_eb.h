@@ -549,7 +549,7 @@ void eb_print(const eb_t p);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int eb_size_bin(const eb_t a, int pack);
+size_t eb_size_bin(const eb_t a, int pack);
 
 /**
  * Reads a binary elliptic curve point from a byte vector in big-endian format.
@@ -560,7 +560,7 @@ int eb_size_bin(const eb_t a, int pack);
  * @throw ERR_NO_VALID		- if the encoded point is invalid.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is invalid.
  */
-void eb_read_bin(eb_t a, const uint8_t *bin, int len);
+void eb_read_bin(eb_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a binary field element to a byte vector in big-endian format with
@@ -572,7 +572,7 @@ void eb_read_bin(eb_t a, const uint8_t *bin, int len);
  * @param[in] pack			- the flag to indicate point compression.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is invalid.
  */
-void eb_write_bin(uint8_t *bin, int len, const eb_t a, int pack);
+void eb_write_bin(uint8_t *bin, size_t len, const eb_t a, int pack);
 
 /**
  * Negates a binary elliptic curve point represented by affine coordinates.
@@ -919,7 +919,7 @@ void eb_norm(eb_t r, const eb_t p);
  * @param[in] t				- the points to convert.
  * @param[in] n				- the number of points.
  */
-void eb_norm_sim(eb_t *r, const eb_t *t, int n);
+void eb_norm_sim(eb_t *r, const eb_t *t, size_t n);
 
 /**
  * Maps a byte array to a point in a binary elliptic curve.
@@ -928,7 +928,7 @@ void eb_norm_sim(eb_t *r, const eb_t *t, int n);
  * @param[in] msg			- the byte array to map.
  * @param[in] len			- the array length in bytes.
  */
-void eb_map(eb_t p, const uint8_t *msg, int len);
+void eb_map(eb_t p, const uint8_t *msg, size_t len);
 
 /**
  * Compresses a point.

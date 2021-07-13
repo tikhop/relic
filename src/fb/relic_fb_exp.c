@@ -88,7 +88,7 @@ void fb_exp_basic(fb_t c, const fb_t a, const bn_t b) {
 
 void fb_exp_slide(fb_t c, const fb_t a, const bn_t b) {
 	fb_t t[1 << (FB_WIDTH - 1)], r;
-	int i, j, l;
+	size_t l;
 	uint8_t win[RLC_FB_BITS + 1];
 
 	fb_null(r);
@@ -100,12 +100,12 @@ void fb_exp_slide(fb_t c, const fb_t a, const bn_t b) {
 
 
 	/* Initialize table. */
-	for (i = 0; i < (1 << (FB_WIDTH - 1)); i++) {
+	for (int i = 0; i < (1 << (FB_WIDTH - 1)); i++) {
 		fb_null(t[i]);
 	}
 
 	RLC_TRY {
-		for (i = 0; i < (1 << (FB_WIDTH - 1)); i ++) {
+		for (int i = 0; i < (1 << (FB_WIDTH - 1)); i ++) {
 			fb_new(t[i]);
 		}
 		fb_new(r);
@@ -114,18 +114,18 @@ void fb_exp_slide(fb_t c, const fb_t a, const bn_t b) {
 		fb_sqr(r, a);
 
 		/* Create table. */
-		for (i = 1; i < 1 << (FB_WIDTH - 1); i++) {
+		for (int i = 1; i < 1 << (FB_WIDTH - 1); i++) {
 			fb_mul(t[i], t[i - 1], r);
 		}
 
 		fb_set_dig(r, 1);
 		l = RLC_FB_BITS + 1;
 		bn_rec_slw(win, &l, b, FB_WIDTH);
-		for (i = 0; i < l; i++) {
+		for (int i = 0; i < l; i++) {
 			if (win[i] == 0) {
 				fb_sqr(r, r);
 			} else {
-				for (j = 0; j < util_bits_dig(win[i]); j++) {
+				for (int j = 0; j < util_bits_dig(win[i]); j++) {
 					fb_sqr(r, r);
 				}
 				fb_mul(r, r, t[win[i] >> 1]);
@@ -142,7 +142,7 @@ void fb_exp_slide(fb_t c, const fb_t a, const bn_t b) {
 		RLC_THROW(ERR_CAUGHT);
 	}
 	RLC_FINALLY {
-		for (i = 0; i < (1 << (FB_WIDTH - 1)); i++) {
+		for (int i = 0; i < (1 << (FB_WIDTH - 1)); i++) {
 			fb_free(t[i]);
 		}
 		fb_free(r);

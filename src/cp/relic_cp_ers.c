@@ -62,7 +62,7 @@ int cp_ers_gen_key(bn_t sk, ec_t pk) {
 	return result;
 }
 
-int cp_ers_sig(bn_t td, ers_t p, uint8_t *msg, int len, bn_t sk, ec_t pk,
+int cp_ers_sig(bn_t td, ers_t p, uint8_t *msg, size_t len, bn_t sk, ec_t pk,
 		ec_t pp) {
 	bn_t n;
 	ec_t t, y[2];
@@ -102,7 +102,7 @@ int cp_ers_sig(bn_t td, ers_t p, uint8_t *msg, int len, bn_t sk, ec_t pk,
 	return result;
 }
 
-int cp_ers_ver(bn_t td, ers_t *s, int size, uint8_t *msg, int len, ec_t pp) {
+int cp_ers_ver(bn_t td, ers_t *s, int size, uint8_t *msg, size_t len, ec_t pp) {
 	bn_t n;
 	ec_t t, y[2];
 	int flag = 0, result = 0;
@@ -146,7 +146,7 @@ int cp_ers_ver(bn_t td, ers_t *s, int size, uint8_t *msg, int len, ec_t pp) {
 	return result;
 }
 
-int cp_ers_ext(bn_t td, ers_t *p, int *size, uint8_t *msg, int len, ec_t pk,
+int cp_ers_ext(bn_t td, ers_t *p, int *size, uint8_t *msg, size_t len, ec_t pk,
 		ec_t pp) {
 	bn_t n, r;
 	ec_t y[2];

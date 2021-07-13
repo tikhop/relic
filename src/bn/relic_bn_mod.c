@@ -37,7 +37,7 @@
 /* Public definitions                                                         */
 /*============================================================================*/
 
-void bn_mod_2b(bn_t c, const bn_t a, int b) {
+void bn_mod_2b(bn_t c, const bn_t a, uint_t b) {
 	int i, first, d;
 
 	if (b <= 0) {

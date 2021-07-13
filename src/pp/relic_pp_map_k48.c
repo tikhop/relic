@@ -41,7 +41,7 @@ static void pp_mil_k48(fp48_t r, fp8_t qx, fp8_t qy, ep_t p, bn_t a) {
 	fp48_t l;
 	ep_t _p;
 	fp8_t rx, ry, rz;
-	int i, len = bn_bits(a) + 1;
+	size_t len = bn_bits(a) + 1;
 	int8_t s[RLC_FP_BITS + 1];
 
 	fp48_null(l);
@@ -70,7 +70,7 @@ static void pp_mil_k48(fp48_t r, fp8_t qx, fp8_t qy, ep_t p, bn_t a) {
 #endif
 
 		bn_rec_naf(s, &len, a, 2);
-		for (i = len - 2; i >= 0; i--) {
+		for (int i = len - 2; i >= 0; i--) {
 			fp48_sqr(r, r);
 			pp_dbl_k48(l, rx, ry, rz, _p);
 			fp48_mul_dxs(r, r, l);

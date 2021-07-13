@@ -100,7 +100,7 @@ void ep4_norm(ep4_t r, ep4_t p) {
 #endif
 }
 
-void ep4_norm_sim(ep4_t *r, ep4_t *t, int n) {
+void ep4_norm_sim(ep4_t *r, ep4_t *t, size_t n) {
 	int i;
 	fp4_t *a = RLC_ALLOCA(fp4_t, n);
 

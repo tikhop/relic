@@ -733,7 +733,7 @@ void ep2_print(ep2_t p);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int ep2_size_bin(ep2_t a, int pack);
+size_t ep2_size_bin(ep2_t a, int pack);
 
 /**
  * Reads a prime elliptic curve point over a quadratic extension from a byte
@@ -745,7 +745,7 @@ int ep2_size_bin(ep2_t a, int pack);
  * @throw ERR_NO_VALID		- if the encoded point is invalid.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is invalid.
  */
-void ep2_read_bin(ep2_t a, const uint8_t *bin, int len);
+void ep2_read_bin(ep2_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a prime elliptic curve pointer over a quadratic extension to a byte
@@ -757,7 +757,7 @@ void ep2_read_bin(ep2_t a, const uint8_t *bin, int len);
  * @param[in] pack			- the flag to indicate point compression.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is invalid.
  */
-void ep2_write_bin(uint8_t *bin, int len, ep2_t a, int pack);
+void ep2_write_bin(uint8_t *bin, size_t len, ep2_t a, int pack);
 
 /**
  * Negates a point represented in affine coordinates in an elliptic curve over
@@ -1105,7 +1105,7 @@ void ep2_mul_sim_gen(ep2_t r, bn_t k, ep2_t q, bn_t m);
  * @param[in] k				- the small scalars.
  * @param[in] len			- the number of points to multiply.
  */
-void ep2_mul_sim_dig(ep2_t r, ep2_t p[], dig_t k[], int len);
+void ep2_mul_sim_dig(ep2_t r, ep2_t p[], dig_t k[], size_t len);
 
 /**
  * Converts a point to affine coordinates.
@@ -1122,7 +1122,7 @@ void ep2_norm(ep2_t r, ep2_t p);
  * @param[in] t				- the points to convert.
  * @param[in] n				- the number of points.
  */
-void ep2_norm_sim(ep2_t *r, ep2_t *t, int n);
+void ep2_norm_sim(ep2_t *r, ep2_t *t, size_t n);
 
 /**
  * Maps a byte array to a point in an elliptic curve over a quadratic extension.
@@ -1131,7 +1131,7 @@ void ep2_norm_sim(ep2_t *r, ep2_t *t, int n);
  * @param[in] msg			- the byte array to map.
  * @param[in] len			- the array length in bytes.
  */
-void ep2_map(ep2_t p, const uint8_t *msg, int len);
+void ep2_map(ep2_t p, const uint8_t *msg, size_t len);
 
 /**
  * Maps a byte array to a point in an elliptic curve over a quadratic extension
@@ -1143,7 +1143,7 @@ void ep2_map(ep2_t p, const uint8_t *msg, int len);
  * @param[in] dst			- the domain separatoin tag.
  * @param[in] dst_len		- the domain separation tag length in bytes.
  */
-void ep2_map_dst(ep2_t p, const uint8_t *msg, int len, const uint8_t *dst, int dst_len);
+void ep2_map_dst(ep2_t p, const uint8_t *msg, size_t len, const uint8_t *dst, int dst_len);
 
 /**
  * Computes a power of the Gailbraith-Lin-Scott homomorphism of a point
@@ -1361,7 +1361,7 @@ void ep4_print(ep4_t p);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int ep4_size_bin(ep4_t a, int pack);
+size_t ep4_size_bin(ep4_t a, int pack);
 
 /**
  * Reads a prime elliptic curve point over a quartic extension from a byte
@@ -1373,7 +1373,7 @@ int ep4_size_bin(ep4_t a, int pack);
  * @throw ERR_NO_VALID		- if the encoded point is invalid.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is invalid.
  */
-void ep4_read_bin(ep4_t a, const uint8_t *bin, int len);
+void ep4_read_bin(ep4_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a prime elliptic curve pointer over a quartic extension to a byte
@@ -1385,7 +1385,7 @@ void ep4_read_bin(ep4_t a, const uint8_t *bin, int len);
  * @param[in] pack			- the flag to indicate compression.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is invalid.
  */
-void ep4_write_bin(uint8_t *bin, int len, ep4_t a, int pack);
+void ep4_write_bin(uint8_t *bin, size_t len, ep4_t a, int pack);
 
 /**
  * Negates a point represented in affine coordinates in an elliptic curve over
@@ -1733,7 +1733,7 @@ void ep4_mul_sim_gen(ep4_t r, bn_t k, ep4_t q, bn_t m);
  * @param[in] k				- the small scalars.
  * @param[in] len			- the number of points to multiply.
  */
-void ep4_mul_sim_dig(ep4_t r, ep4_t p[], dig_t k[], int len);
+void ep4_mul_sim_dig(ep4_t r, ep4_t p[], dig_t k[], size_t len);
 
 /**
  * Converts a point to affine coordinates.
@@ -1750,7 +1750,7 @@ void ep4_norm(ep4_t r, ep4_t p);
  * @param[in] t				- the points to convert.
  * @param[in] n				- the number of points.
  */
-void ep4_norm_sim(ep4_t *r, ep4_t *t, int n);
+void ep4_norm_sim(ep4_t *r, ep4_t *t, size_t n);
 
 /**
  * Maps a byte array to a point in an elliptic curve over a quartic extension.
@@ -1759,7 +1759,7 @@ void ep4_norm_sim(ep4_t *r, ep4_t *t, int n);
  * @param[in] msg			- the byte array to map.
  * @param[in] len			- the array length in bytes.
  */
-void ep4_map(ep4_t p, const uint8_t *msg, int len);
+void ep4_map(ep4_t p, const uint8_t *msg, size_t len);
 
 /**
  * Maps a byte array to a point in an elliptic curve over a quartic extension
@@ -1771,7 +1771,7 @@ void ep4_map(ep4_t p, const uint8_t *msg, int len);
  * @param[in] dst			- the domain separatoin tag.
  * @param[in] dst_len		- the domain separation tag length in bytes.
  */
-void ep4_map_dst(ep4_t p, const uint8_t *msg, int len, const uint8_t *dst, int dst_len);
+void ep4_map_dst(ep4_t p, const uint8_t *msg, size_t len, const uint8_t *dst, int dst_len);
 
 /**
  * Computes a power of the Gailbraith-Lin-Scott homomorphism of a point

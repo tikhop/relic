@@ -100,7 +100,7 @@ void ep2_norm(ep2_t r, ep2_t p) {
 #endif
 }
 
-void ep2_norm_sim(ep2_t *r, ep2_t *t, int n) {
+void ep2_norm_sim(ep2_t *r, ep2_t *t, size_t n) {
 	int i;
 	fp2_t *a = RLC_ALLOCA(fp2_t, n);
 

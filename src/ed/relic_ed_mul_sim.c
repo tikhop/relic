@@ -53,7 +53,8 @@
  */
 static void ed_mul_sim_plain(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 		const bn_t m, const ed_t *t) {
-	int i, l, l0, l1, n0, n1, w, gen;
+	size_t l, l0, l1;
+	int n0, n1, w, gen;
 	int8_t naf0[RLC_FP_BITS + 1], naf1[RLC_FP_BITS + 1], *_k, *_m;
 	ed_t t0[1 << (ED_WIDTH - 2)];
 	ed_t t1[1 << (ED_WIDTH - 2)];
@@ -61,7 +62,7 @@ static void ed_mul_sim_plain(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 	RLC_TRY {
 		gen = (t == NULL ? 0 : 1);
 		if (!gen) {
-			for (i = 0; i < (1 << (ED_WIDTH - 2)); i++) {
+			for (int i = 0; i < (1 << (ED_WIDTH - 2)); i++) {
 				ed_null(t0[i]);
 				ed_new(t0[i]);
 			}
@@ -70,7 +71,7 @@ static void ed_mul_sim_plain(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 		}
 
 		/* Prepare the precomputation table. */
-		for (i = 0; i < (1 << (ED_WIDTH - 2)); i++) {
+		for (int i = 0; i < (1 << (ED_WIDTH - 2)); i++) {
 			ed_null(t1[i]);
 			ed_new(t1[i]);
 		}
@@ -89,12 +90,12 @@ static void ed_mul_sim_plain(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 
 		l = RLC_MAX(l0, l1);
 		if (bn_sign(k) == RLC_NEG) {
-			for (i =  0; i < l0; i++) {
+			for (int i = 0; i < l0; i++) {
 				naf0[i] = -naf0[i];
 			}
 		}
 		if (bn_sign(m) == RLC_NEG) {
-			for (i =  0; i < l1; i++) {
+			for (int i = 0; i < l1; i++) {
 				naf1[i] = -naf1[i];
 			}
 		}
@@ -102,7 +103,7 @@ static void ed_mul_sim_plain(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 		_k = naf0 + l - 1;
 		_m = naf1 + l - 1;
 		ed_set_infty(r);
-		for (i = l - 1; i >= 0; i--, _k--, _m--) {
+		for (int i = l - 1; i >= 0; i--, _k--, _m--) {
 			ed_dbl(r, r);
 
 			n0 = *_k;
@@ -129,11 +130,11 @@ static void ed_mul_sim_plain(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 	RLC_FINALLY {
 		/* Free the precomputation tables. */
 		if (!gen) {
-			for (i = 0; i < 1 << (ED_WIDTH - 2); i++) {
+			for (int i = 0; i < 1 << (ED_WIDTH - 2); i++) {
 				ed_free(t0[i]);
 			}
 		}
-		for (i = 0; i < 1 << (ED_WIDTH - 2); i++) {
+		for (int i = 0; i < 1 << (ED_WIDTH - 2); i++) {
 			ed_free(t1[i]);
 		}
 	}
@@ -176,7 +177,8 @@ void ed_mul_sim_trick(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 		const bn_t m) {
 	ed_t t0[1 << (ED_WIDTH / 2)], t1[1 << (ED_WIDTH / 2)], t[1 << ED_WIDTH];
 	bn_t n;
-	int l0, l1, w = ED_WIDTH / 2;
+	size_t l0, l1;
+	int w = ED_WIDTH / 2;
 	uint8_t w0[RLC_FP_BITS + 1], w1[RLC_FP_BITS + 1];
 
 	bn_null(n);
@@ -293,7 +295,8 @@ void ed_mul_sim_inter(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 void ed_mul_sim_joint(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 		const bn_t m) {
 	ed_t t[5];
-	int i, l, u_i, offset;
+	size_t l;
+	int u_i, offset;
 	int8_t jsf[2 * (RLC_FP_BITS + 1)];
 
 	if (bn_is_zero(k) || ed_is_infty(p)) {
@@ -306,7 +309,7 @@ void ed_mul_sim_joint(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 	}
 
 	RLC_TRY {
-		for (i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {
 			ed_null(t[i]);
 			ed_new(t[i]);
 		}
@@ -332,7 +335,7 @@ void ed_mul_sim_joint(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 		ed_set_infty(r);
 
 		offset = RLC_MAX(bn_bits(k), bn_bits(m)) + 1;
-		for (i = l - 1; i >= 0; i--) {
+		for (int i = l - 1; i >= 0; i--) {
 			ed_dbl(r, r);
 			if (jsf[i] != 0 && jsf[i] == -jsf[i + offset]) {
 				u_i = jsf[i] * 2 + jsf[i + offset];
@@ -356,7 +359,7 @@ void ed_mul_sim_joint(ed_t r, const ed_t p, const bn_t k, const ed_t q,
 		RLC_THROW(ERR_CAUGHT);
 	}
 	RLC_FINALLY {
-		for (i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {
 			ed_free(t[i]);
 		}
 	}

@@ -49,7 +49,7 @@
  * @param[in] k					- the integer.
  */
 static void eb_mul_fix_kbltz(eb_t r, const eb_t *t, const bn_t k) {
-	int i, l, n;
+	size_t l;
 	int8_t u, tnaf[RLC_FB_BITS + 8];
 
 	if (bn_is_zero(k)) {
@@ -68,22 +68,20 @@ static void eb_mul_fix_kbltz(eb_t r, const eb_t *t, const bn_t k) {
 	l = sizeof(tnaf);
 	bn_rec_tnaf(tnaf, &l, k, u, RLC_FB_BITS, EB_DEPTH);
 
-	n = tnaf[l - 1];
-	if (n > 0) {
-		eb_copy(r, t[n / 2]);
+	if (tnaf[l - 1] > 0) {
+		eb_copy(r, t[tnaf[l - 1] / 2]);
 	} else {
-		eb_neg(r, t[-n / 2]);
+		eb_neg(r, t[-tnaf[l - 1] / 2]);
 	}
 
-	for (i = l - 2; i >= 0; i--) {
+	for (int i = l - 2; i >= 0; i--) {
 		eb_frb(r, r);
 
-		n = tnaf[i];
-		if (n > 0) {
-			eb_add(r, r, t[n / 2]);
+		if (tnaf[i] > 0) {
+			eb_add(r, r, t[tnaf[i] / 2]);
 		}
-		if (n < 0) {
-			eb_sub(r, r, t[-n / 2]);
+		if (tnaf[i] < 0) {
+			eb_sub(r, r, t[-tnaf[i] / 2]);
 		}
 	}
 	/* Convert r to affine coordinates. */
@@ -106,7 +104,7 @@ static void eb_mul_fix_kbltz(eb_t r, const eb_t *t, const bn_t k) {
  * @param[in] k					- the integer.
  */
 static void eb_mul_fix_plain(eb_t r, const eb_t *t, const bn_t k) {
-	int l, i, n;
+	size_t l;
 	int8_t naf[RLC_FB_BITS + 1];
 
 	if (bn_is_zero(k)) {
@@ -118,20 +116,18 @@ static void eb_mul_fix_plain(eb_t r, const eb_t *t, const bn_t k) {
 	l = RLC_FB_BITS + 1;
 	bn_rec_naf(naf, &l, k, EB_DEPTH);
 
-	n = naf[l - 1];
-	if (n > 0) {
-		eb_copy(r, t[n / 2]);
+	if (naf[l - 1] > 0) {
+		eb_copy(r, t[naf[l - 1] / 2]);
 	}
 
-	for (i = l - 2; i >= 0; i--) {
+	for (int i = l - 2; i >= 0; i--) {
 		eb_dbl(r, r);
 
-		n = naf[i];
-		if (n > 0) {
-			eb_add(r, r, t[n / 2]);
+		if (naf[i] > 0) {
+			eb_add(r, r, t[naf[i] / 2]);
 		}
-		if (n < 0) {
-			eb_sub(r, r, t[-n / 2]);
+		if (naf[i] < 0) {
+			eb_sub(r, r, t[-naf[i] / 2]);
 		}
 	}
 	/* Convert r to affine coordinates. */

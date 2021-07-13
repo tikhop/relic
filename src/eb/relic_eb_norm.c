@@ -104,7 +104,7 @@ void eb_norm(eb_t r, const eb_t p) {
 #endif /* EB_ADD == PROJC */
 }
 
-void eb_norm_sim(eb_t *r, const eb_t *t, int n) {
+void eb_norm_sim(eb_t *r, const eb_t *t, size_t n) {
 	fb_t *a = RLC_ALLOCA(fb_t, n);
 
 	if (n == 1) {

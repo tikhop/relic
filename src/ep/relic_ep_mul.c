@@ -40,7 +40,8 @@
 #if defined(EP_ENDOM)
 
 static void ep_mul_glv_imp(ep_t r, const ep_t p, const bn_t k) {
-	int l, l0, l1, i, n0, n1, s0, s1;
+	size_t l, l0, l1;
+	int i, n0, n1, s0, s1;
 	int8_t naf0[RLC_FP_BITS + 1], naf1[RLC_FP_BITS + 1], *t0, *t1;
 	bn_t n, _k, k0, k1, v1[3], v2[3];
 	ep_t q, t[1 << (EP_WIDTH - 2)];
@@ -157,7 +158,7 @@ static void ep_mul_glv_imp(ep_t r, const ep_t p, const bn_t k) {
 #if defined(EP_PLAIN) || defined(EP_SUPER)
 
 static void ep_mul_naf_imp(ep_t r, const ep_t p, const bn_t k) {
-	int i, l;
+	size_t l;
 	/* Some of the supported prime curves have order > field. */
 	int8_t u, naf[RLC_FP_BITS + 2];
 	ep_t t[1 << (EP_WIDTH - 2)];
@@ -170,7 +171,7 @@ static void ep_mul_naf_imp(ep_t r, const ep_t p, const bn_t k) {
 		bn_new(n);
 		bn_new(_k);
 		/* Prepare the precomputation table. */
-		for (i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
+		for (int i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
 			ep_null(t[i]);
 			ep_new(t[i]);
 		}
@@ -189,7 +190,7 @@ static void ep_mul_naf_imp(ep_t r, const ep_t p, const bn_t k) {
 		bn_rec_naf(naf, &l, _k, EP_WIDTH);
 
 		ep_set_infty(r);
-		for (i = l - 1; i >= 0; i--) {
+		for (int i = l - 1; i >= 0; i--) {
 			ep_dbl(r, r);
 
 			u = naf[i];
@@ -212,7 +213,7 @@ static void ep_mul_naf_imp(ep_t r, const ep_t p, const bn_t k) {
 		bn_free(n);
 		bn_free(_k);
 		/* Free the precomputation table. */
-		for (i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
+		for (int i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
 			ep_free(t[i]);
 		}
 	}
@@ -226,7 +227,8 @@ static void ep_mul_naf_imp(ep_t r, const ep_t p, const bn_t k) {
 #if defined(EP_ENDOM)
 
 static void ep_mul_reg_glv(ep_t r, const ep_t p, const bn_t k) {
-	int i, j, l, n0, n1, s0, s1, b0, b1;
+	int i, j, n0, n1, s0, s1, b0, b1;
+	size_t l;
 	int8_t _s0, _s1, reg0[RLC_FP_BITS + 1], reg1[RLC_FP_BITS + 1];
 	bn_t n, _k, k0, k1, v1[3], v2[3];
 	ep_t q, t[1 << (EP_WIDTH - 2)], u, v, w;
@@ -380,7 +382,8 @@ static void ep_mul_reg_glv(ep_t r, const ep_t p, const bn_t k) {
 
 static void ep_mul_reg_imp(ep_t r, const ep_t p, const bn_t k) {
 	bn_t _k;
-	int i, j, l, n;
+	int i, j, n;
+	size_t l;
 	int8_t s, reg[1 + RLC_CEIL(RLC_FP_BITS + 1, EP_WIDTH - 1)];
 	ep_t t[1 << (EP_WIDTH - 2)], u, v;
 
@@ -515,7 +518,7 @@ void ep_mul_basic(ep_t r, const ep_t p, const bn_t k) {
 void ep_mul_slide(ep_t r, const ep_t p, const bn_t k) {
 	bn_t _k, n;
 	ep_t t[1 << (EP_WIDTH - 1)], q;
-	int i, j, l;
+	size_t l;
 	uint8_t win[RLC_FP_BITS + 1];
 
 	if (bn_is_zero(k) || ep_is_infty(p)) {
@@ -530,7 +533,7 @@ void ep_mul_slide(ep_t r, const ep_t p, const bn_t k) {
 	RLC_TRY {
 		bn_new(n);
 		bn_new(_k);
-		for (i = 0; i < (1 << (EP_WIDTH - 1)); i ++) {
+		for (int i = 0; i < (1 << (EP_WIDTH - 1)); i ++) {
 			ep_null(t[i]);
 			ep_new(t[i]);
 		}
@@ -550,7 +553,7 @@ void ep_mul_slide(ep_t r, const ep_t p, const bn_t k) {
 		}
 
 		/* Create table. */
-		for (i = 1; i < (1 << (EP_WIDTH - 1)); i++) {
+		for (int i = 1; i < (1 << (EP_WIDTH - 1)); i++) {
 			ep_add(t[i], t[i - 1], q);
 		}
 
@@ -561,11 +564,11 @@ void ep_mul_slide(ep_t r, const ep_t p, const bn_t k) {
 		ep_set_infty(q);
 		l = RLC_FP_BITS + 1;
 		bn_rec_slw(win, &l, _k, EP_WIDTH);
-		for (i = 0; i < l; i++) {
+		for (int i = 0; i < l; i++) {
 			if (win[i] == 0) {
 				ep_dbl(q, q);
 			} else {
-				for (j = 0; j < util_bits_dig(win[i]); j++) {
+				for (int j = 0; j < util_bits_dig(win[i]); j++) {
 					ep_dbl(q, q);
 				}
 				ep_add(q, q, t[win[i] >> 1]);
@@ -583,7 +586,7 @@ void ep_mul_slide(ep_t r, const ep_t p, const bn_t k) {
 	RLC_FINALLY {
 		bn_free(n);
 		bn_free(_k);
-		for (i = 0; i < (1 << (EP_WIDTH - 1)); i++) {
+		for (int i = 0; i < (1 << (EP_WIDTH - 1)); i++) {
 			ep_free(t[i]);
 		}
 		ep_free(q);

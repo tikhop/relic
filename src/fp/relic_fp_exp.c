@@ -83,7 +83,8 @@ void fp_exp_basic(fp_t c, const fp_t a, const bn_t b) {
 
 void fp_exp_slide(fp_t c, const fp_t a, const bn_t b) {
 	fp_t t[1 << (FP_WIDTH - 1)], r;
-	int i, j, l;
+	int i, j;
+	size_t l;
 	uint8_t win[RLC_FP_BITS + 1];
 
 	fp_null(r);

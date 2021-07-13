@@ -1813,7 +1813,8 @@ static int factor(void) {
 static int recoding(void) {
 	int code = RLC_ERR;
 	bn_t a, b, c, v1[3], v2[3];
-	int w, k, l;
+	int w, k;
+	size_t l;
 	uint8_t d[RLC_BN_BITS + 1];
 	signed char e[2 * (RLC_BN_BITS + 1)];
 

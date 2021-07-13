@@ -44,6 +44,11 @@ void bn_srt(bn_t c, bn_t a) {
 		RLC_THROW(ERR_NO_VALID);
 	}
 
+	if (bn_is_zero(a)) {
+		bn_zero(c);
+		return;
+	}
+
 	bits = bn_bits(a);
 	bits += (bits % 2);
 

@@ -41,7 +41,7 @@ static void pp_mil_k54(fp54_t r, fp9_t qx, fp9_t qy, ep_t p, bn_t a) {
 	fp54_t l;
 	ep_t _p;
 	fp9_t rx, ry, rz, sx, sy, sz;
-	int i, len = bn_bits(a) + 1;
+	size_t len = bn_bits(a) + 1;
 	int8_t s[RLC_FP_BITS + 1];
 
 	fp54_null(l);
@@ -76,7 +76,7 @@ static void pp_mil_k54(fp54_t r, fp9_t qx, fp9_t qy, ep_t p, bn_t a) {
 #endif
 
 		bn_rec_naf(s, &len, a, 2);
-		for (i = len - 2; i >= 0; i--) {
+		for (int i = len - 2; i >= 0; i--) {
 			fp54_sqr(r, r);
 			pp_dbl_k54(l, rx, ry, rz, _p);
 			fp54_mul_dxs(r, r, l);

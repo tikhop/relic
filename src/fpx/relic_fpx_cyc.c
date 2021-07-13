@@ -83,7 +83,7 @@ int fp2_test_cyc(fp2_t a) {
 
 void fp2_exp_cyc(fp2_t c, fp2_t a, bn_t b) {
 	fp2_t r, s, t[1 << (FP_WIDTH - 2)];
-	int i, l;
+	size_t l;
 	signed char naf[RLC_FP_BITS + 1], *k;
 
 	if (bn_is_zero(b)) {
@@ -96,7 +96,7 @@ void fp2_exp_cyc(fp2_t c, fp2_t a, bn_t b) {
 	RLC_TRY {
 		fp2_new(r);
 		fp2_new(s);
-		for (i = 0; i < (1 << (FP_WIDTH - 2)); i ++) {
+		for (int i = 0; i < (1 << (FP_WIDTH - 2)); i ++) {
 			fp2_null(t[i]);
 			fp2_new(t[i]);
 		}
@@ -116,7 +116,7 @@ void fp2_exp_cyc(fp2_t c, fp2_t a, bn_t b) {
 
 		k = naf + l - 1;
 
-		for (i = l - 1; i >= 0; i--, k--) {
+		for (int i = l - 1; i >= 0; i--, k--) {
 			fp2_sqr(r, r);
 
 			if (*k > 0) {
@@ -140,7 +140,7 @@ void fp2_exp_cyc(fp2_t c, fp2_t a, bn_t b) {
 	RLC_FINALLY {
 		fp2_free(r);
 		fp2_free(s);
-		for (i = 0; i < (1 << (FP_WIDTH - 2)); i++) {
+		for (int i = 0; i < (1 << (FP_WIDTH - 2)); i++) {
 			fp2_free(t[i]);
 		}
 	}
@@ -193,7 +193,7 @@ int fp8_test_cyc(fp8_t a) {
 
 void fp8_exp_cyc(fp8_t c, fp8_t a, bn_t b) {
 	fp8_t r, s, t[1 << (FP_WIDTH - 2)];
-	int i, l;
+	size_t l;
 	signed char naf[RLC_FP_BITS + 1], *k;
 
 	if (bn_is_zero(b)) {
@@ -206,7 +206,7 @@ void fp8_exp_cyc(fp8_t c, fp8_t a, bn_t b) {
 	RLC_TRY {
 		fp8_new(r);
 		fp8_new(s);
-		for (i = 0; i < (1 << (FP_WIDTH - 2)); i ++) {
+		for (int i = 0; i < (1 << (FP_WIDTH - 2)); i ++) {
 			fp8_null(t[i]);
 			fp8_new(t[i]);
 		}
@@ -226,7 +226,7 @@ void fp8_exp_cyc(fp8_t c, fp8_t a, bn_t b) {
 
 		k = naf + l - 1;
 
-		for (i = l - 1; i >= 0; i--, k--) {
+		for (int i = l - 1; i >= 0; i--, k--) {
 			fp8_sqr_cyc(r, r);
 
 			if (*k > 0) {
@@ -250,7 +250,7 @@ void fp8_exp_cyc(fp8_t c, fp8_t a, bn_t b) {
 	RLC_FINALLY {
 		fp8_free(r);
 		fp8_free(s);
-		for (i = 0; i < (1 << (FP_WIDTH - 2)); i++) {
+		for (int i = 0; i < (1 << (FP_WIDTH - 2)); i++) {
 			fp8_free(t[i]);
 		}
 	}
@@ -461,7 +461,7 @@ void fp12_exp_cyc(fp12_t c, fp12_t a, bn_t b) {
 	}
 
 	if ((bn_bits(b) > RLC_DIG) && ((w << 3) > bn_bits(b))) {
-		int _l[4];
+		size_t _l[4];
 		int8_t naf[4][RLC_FP_BITS + 1];
 		fp12_t t[4];
 		bn_t _b[4], n, u;
@@ -603,7 +603,8 @@ void fp12_exp_cyc(fp12_t c, fp12_t a, bn_t b) {
 }
 
 void fp2_exp_cyc_sim(fp2_t e, fp2_t a, bn_t b, fp2_t c, bn_t d) {
-	int i, l, n0, n1, l0, l1;
+	int i, l, n0, n1;
+	size_t l0, l1;
 	int8_t naf0[RLC_FP_BITS + 1], naf1[RLC_FP_BITS + 1], *_k, *_m;
 	fp2_t r, t0[1 << (EP_WIDTH - 2)];
 	fp2_t s, t1[1 << (EP_WIDTH - 2)];
@@ -1090,7 +1091,8 @@ void fp24_exp_cyc(fp24_t c, fp24_t a, bn_t b) {
 	}
 
 	if ((bn_bits(b) > RLC_DIG) && ((w << 3) > bn_bits(b))) {
-		int l, _l[8];
+		int l;
+		size_t _l[8];
 		int8_t naf[8][RLC_FP_BITS + 1];
 		fp24_t t[8];
 		bn_t _b[8], n, x;
@@ -1234,7 +1236,8 @@ void fp24_exp_cyc(fp24_t c, fp24_t a, bn_t b) {
 }
 
 void fp24_exp_cyc_sim(fp24_t e, fp24_t a, bn_t b, fp24_t c, bn_t d) {
-	int i, l, n0, n1, l0, l1;
+	int i, l, n0, n1;
+	size_t l0, l1;
 	int8_t naf0[RLC_FP_BITS + 1], naf1[RLC_FP_BITS + 1], *_k, *_m;
 	fp24_t r, t0[1 << (EP_WIDTH - 2)];
 	fp24_t s, t1[1 << (EP_WIDTH - 2)];

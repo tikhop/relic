@@ -1321,7 +1321,7 @@ void fp2_print(fp2_t a);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int fp2_size_bin(fp2_t a, int pack);
+size_t fp2_size_bin(fp2_t a, int pack);
 
 /**
  * Reads a quadratic extension field element from a byte vector in big-endian
@@ -1332,7 +1332,7 @@ int fp2_size_bin(fp2_t a, int pack);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp2_read_bin(fp2_t a, const uint8_t *bin, int len);
+void fp2_read_bin(fp2_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a quadratic extension field element to a byte vector in big-endian
@@ -1344,7 +1344,7 @@ void fp2_read_bin(fp2_t a, const uint8_t *bin, int len);
  * @param[in] pack			- the flag to indicate compression.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp2_write_bin(uint8_t *bin, int len, fp2_t a, int pack);
+void fp2_write_bin(uint8_t *bin, size_t len, fp2_t a, int pack);
 
 /**
  * Returns the result of a comparison between two quadratic extension field
@@ -1679,7 +1679,7 @@ void fp3_print(fp3_t a);
  * @param[out] size			- the result.
  * @param[in] a				- the extension field element.
  */
-int fp3_size_bin(fp3_t a);
+size_t fp3_size_bin(fp3_t a);
 
 /**
  * Reads a cubic extension field element from a byte vector in big-endian
@@ -1690,7 +1690,7 @@ int fp3_size_bin(fp3_t a);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp3_read_bin(fp3_t a, const uint8_t *bin, int len);
+void fp3_read_bin(fp3_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a cubic extension field element to a byte vector in big-endian
@@ -1701,7 +1701,7 @@ void fp3_read_bin(fp3_t a, const uint8_t *bin, int len);
  * @param[in] a				- the extension field element to write.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp3_write_bin(uint8_t *bin, int len, fp3_t a);
+void fp3_write_bin(uint8_t *bin, size_t len, fp3_t a);
 
 /**
  * Returns the result of a comparison between two cubic extension field
@@ -1945,7 +1945,7 @@ void fp4_print(fp4_t a);
  * @param[out] size			- the result.
  * @param[in] a				- the extension field element.
  */
-int fp4_size_bin(fp4_t a);
+size_t fp4_size_bin(fp4_t a);
 
 /**
  * Reads a quartic extension field element from a byte vector in big-endian
@@ -1956,7 +1956,7 @@ int fp4_size_bin(fp4_t a);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp4_read_bin(fp4_t a, const uint8_t *bin, int len);
+void fp4_read_bin(fp4_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a quartic extension field element to a byte vector in big-endian
@@ -1967,7 +1967,7 @@ void fp4_read_bin(fp4_t a, const uint8_t *bin, int len);
  * @param[in] a				- the extension field element to write.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp4_write_bin(uint8_t *bin, int len, fp4_t a);
+void fp4_write_bin(uint8_t *bin, size_t len, fp4_t a);
 
 /**
  * Returns the result of a comparison between two quartic extension field
@@ -2215,7 +2215,7 @@ void fp6_print(fp6_t a);
  * @param[out] size			- the result.
  * @param[in] a				- the extension field element.
  */
-int fp6_size_bin(fp6_t a);
+size_t fp6_size_bin(fp6_t a);
 
 /**
  * Reads a quadratic extension field element from a byte vector in big-endian
@@ -2226,7 +2226,7 @@ int fp6_size_bin(fp6_t a);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp6_read_bin(fp6_t a, const uint8_t *bin, int len);
+void fp6_read_bin(fp6_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a sextic extension field element to a byte vector in big-endian
@@ -2237,7 +2237,7 @@ void fp6_read_bin(fp6_t a, const uint8_t *bin, int len);
  * @param[in] a				- the extension field element to write.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp6_write_bin(uint8_t *bin, int len, fp6_t a);
+void fp6_write_bin(uint8_t *bin, size_t len, fp6_t a);
 
 /**
  * Returns the result of a comparison between two sextic extension field
@@ -2445,7 +2445,7 @@ void fp8_print(fp8_t a);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int fp8_size_bin(fp8_t a, int pack);
+size_t fp8_size_bin(fp8_t a, int pack);
 
 /**
  * Reads an octic extension field element from a byte vector in big-endian
@@ -2456,7 +2456,7 @@ int fp8_size_bin(fp8_t a, int pack);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp8_read_bin(fp8_t a, const uint8_t *bin, int len);
+void fp8_read_bin(fp8_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes an octic extension field element to a byte vector in big-endian
@@ -2467,7 +2467,7 @@ void fp8_read_bin(fp8_t a, const uint8_t *bin, int len);
  * @param[in] a				- the extension field element to write.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp8_write_bin(uint8_t *bin, int len, fp8_t a);
+void fp8_write_bin(uint8_t *bin, size_t len, fp8_t a);
 
 /**
  * Returns the result of a comparison between two octic extension field
@@ -2728,7 +2728,7 @@ void fp9_print(fp9_t a);
  * @param[out] size			- the result.
  * @param[in] a				- the extension field element.
  */
-int fp9_size_bin(fp9_t a);
+size_t fp9_size_bin(fp9_t a);
 
 /**
  * Reads a quadratic extension field element from a byte vector in big-endian
@@ -2739,7 +2739,7 @@ int fp9_size_bin(fp9_t a);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp9_read_bin(fp9_t a, const uint8_t *bin, int len);
+void fp9_read_bin(fp9_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a nonic extension field element to a byte vector in big-endian
@@ -2750,7 +2750,7 @@ void fp9_read_bin(fp9_t a, const uint8_t *bin, int len);
  * @param[in] a				- the extension field element to write.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp9_write_bin(uint8_t *bin, int len, fp9_t a);
+void fp9_write_bin(uint8_t *bin, size_t len, fp9_t a);
 
 /**
  * Returns the result of a comparison between two nonic extension field
@@ -2967,7 +2967,7 @@ void fp12_print(fp12_t a);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int fp12_size_bin(fp12_t a, int pack);
+size_t fp12_size_bin(fp12_t a, int pack);
 
 /**
  * Reads a dodecic extension field element from a byte vector in big-endian
@@ -2978,7 +2978,7 @@ int fp12_size_bin(fp12_t a, int pack);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp12_read_bin(fp12_t a, const uint8_t *bin, int len);
+void fp12_read_bin(fp12_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a dodecic extension field element to a byte vector in big-endian
@@ -2990,7 +2990,7 @@ void fp12_read_bin(fp12_t a, const uint8_t *bin, int len);
  * @param[in] pack			- the flag to indicate compression.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp12_write_bin(uint8_t *bin, int len, fp12_t a, int pack);
+void fp12_write_bin(uint8_t *bin, size_t len, fp12_t a, int pack);
 
 /**
  * Returns the result of a comparison between two dodecic extension field
@@ -3384,7 +3384,7 @@ void fp18_print(fp18_t a);
  * @param[in] a				- the extension field element.
  * @return the number of bytes.
  */
-int fp18_size_bin(fp18_t a);
+size_t fp18_size_bin(fp18_t a);
 
 /**
  * Reads an octdecic extension field element from a byte vector in big-endian
@@ -3395,7 +3395,7 @@ int fp18_size_bin(fp18_t a);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp18_read_bin(fp18_t a, const uint8_t *bin, int len);
+void fp18_read_bin(fp18_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes an octdecic extension field element to a byte vector in big-endian
@@ -3406,7 +3406,7 @@ void fp18_read_bin(fp18_t a, const uint8_t *bin, int len);
  * @param[in] a				- the extension field element to write.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp18_write_bin(uint8_t *bin, int len, fp18_t a);
+void fp18_write_bin(uint8_t *bin, size_t len, fp18_t a);
 
 /**
  * Returns the result of a comparison between two octdecic extension field
@@ -3646,7 +3646,7 @@ void fp24_print(fp24_t a);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int fp24_size_bin(fp24_t a, int pack);
+size_t fp24_size_bin(fp24_t a, int pack);
 
 /**
  * Reads a 24-degree extension field element from a byte vector in big-endian
@@ -3657,7 +3657,7 @@ int fp24_size_bin(fp24_t a, int pack);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp24_read_bin(fp24_t a, const uint8_t *bin, int len);
+void fp24_read_bin(fp24_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a 24-degree extension field element to a byte vector in big-endian
@@ -3669,7 +3669,7 @@ void fp24_read_bin(fp24_t a, const uint8_t *bin, int len);
  * @param[in] pack			- the flag to indicate compression.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp24_write_bin(uint8_t *bin, int len, fp24_t a, int pack);
+void fp24_write_bin(uint8_t *bin, size_t len, fp24_t a, int pack);
 
 /**
  * Returns the result of a comparison between two 24-degree extension field
@@ -4025,7 +4025,7 @@ void fp48_print(fp48_t a);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int fp48_size_bin(fp48_t a, int pack);
+size_t fp48_size_bin(fp48_t a, int pack);
 
 /**
  * Reads a 48-extension field element from a byte vector in big-endian
@@ -4036,7 +4036,7 @@ int fp48_size_bin(fp48_t a, int pack);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp48_read_bin(fp48_t a, const uint8_t *bin, int len);
+void fp48_read_bin(fp48_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a 48-extension field element to a byte vector in big-endian
@@ -4048,7 +4048,7 @@ void fp48_read_bin(fp48_t a, const uint8_t *bin, int len);
  * @param[in] pack			- the flag to indicate compression.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp48_write_bin(uint8_t *bin, int len, fp48_t a, int pack);
+void fp48_write_bin(uint8_t *bin, size_t len, fp48_t a, int pack);
 
 /**
  * Returns the result of a comparison between two 48-extension field
@@ -4385,7 +4385,7 @@ void fp54_print(fp54_t a);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int fp54_size_bin(fp54_t a, int pack);
+size_t fp54_size_bin(fp54_t a, int pack);
 
 /**
  * Reads a 54-extension field element from a byte vector in big-endian
@@ -4396,7 +4396,7 @@ int fp54_size_bin(fp54_t a, int pack);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp54_read_bin(fp54_t a, const uint8_t *bin, int len);
+void fp54_read_bin(fp54_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a 54-extension field element to a byte vector in big-endian
@@ -4408,7 +4408,7 @@ void fp54_read_bin(fp54_t a, const uint8_t *bin, int len);
  * @param[in] pack			- the flag to indicate compression.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not correct.
  */
-void fp54_write_bin(uint8_t *bin, int len, fp54_t a, int pack);
+void fp54_write_bin(uint8_t *bin, size_t len, fp54_t a, int pack);
 
 /**
  * Returns the result of a comparison between two 54-extension field

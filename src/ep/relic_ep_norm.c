@@ -109,7 +109,7 @@ void ep_norm(ep_t r, const ep_t p) {
 #endif /* EP_ADD == PROJC */
 }
 
-void ep_norm_sim(ep_t *r, const ep_t *t, int n) {
+void ep_norm_sim(ep_t *r, const ep_t *t, size_t n) {
 	int i;
 	fp_t* a = RLC_ALLOCA(fp_t, n);
 

@@ -40,8 +40,8 @@
 /* Public definitions                                                         */
 /*============================================================================*/
 
-int bc_aes_cbc_enc(uint8_t *out, int *out_len, uint8_t *in,
-		int in_len, uint8_t *key, int key_len, uint8_t *iv) {
+int bc_aes_cbc_enc(uint8_t *out, size_t *out_len, uint8_t *in,
+		size_t in_len, uint8_t *key, size_t key_len, uint8_t *iv) {
 	keyInstance key_inst;
 	cipherInstance cipher_inst;
 
@@ -63,8 +63,8 @@ int bc_aes_cbc_enc(uint8_t *out, int *out_len, uint8_t *in,
 	return RLC_OK;
 }
 
-int bc_aes_cbc_dec(uint8_t *out, int *out_len, uint8_t *in,
-		int in_len, uint8_t *key, int key_len, uint8_t *iv) {
+int bc_aes_cbc_dec(uint8_t *out, size_t *out_len, uint8_t *in,
+		size_t in_len, uint8_t *key, size_t key_len, uint8_t *iv) {
 	keyInstance key_inst;
 	cipherInstance cipher_inst;
 

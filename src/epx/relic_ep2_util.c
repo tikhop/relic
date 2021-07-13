@@ -215,7 +215,7 @@ void ep2_print(ep2_t p) {
 	fp2_print(p->z);
 }
 
-int ep2_size_bin(ep2_t a, int pack) {
+size_t ep2_size_bin(ep2_t a, int pack) {
 	ep2_t t;
 	int size = 0;
 
@@ -243,7 +243,7 @@ int ep2_size_bin(ep2_t a, int pack) {
 	return size;
 }
 
-void ep2_read_bin(ep2_t a, const uint8_t *bin, int len) {
+void ep2_read_bin(ep2_t a, const uint8_t *bin, size_t len) {
 	if (len == 1) {
 		if (bin[0] == 0) {
 			ep2_set_infty(a);
@@ -289,7 +289,7 @@ void ep2_read_bin(ep2_t a, const uint8_t *bin, int len) {
 	}
 }
 
-void ep2_write_bin(uint8_t *bin, int len, ep2_t a, int pack) {
+void ep2_write_bin(uint8_t *bin, size_t len, ep2_t a, int pack) {
 	ep2_t t;
 
 	ep2_null(t);

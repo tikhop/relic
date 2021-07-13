@@ -59,7 +59,7 @@ int cp_cls_gen(bn_t r, bn_t s, g2_t x, g2_t y) {
 	return result;
 }
 
-int cp_cls_sig(g1_t a, g1_t b, g1_t c, uint8_t *msg, int len, bn_t r, bn_t s) {
+int cp_cls_sig(g1_t a, g1_t b, g1_t c, uint8_t *msg, size_t len, bn_t r, bn_t s) {
 	bn_t m, n;
 	int result = RLC_OK;
 
@@ -95,7 +95,7 @@ int cp_cls_sig(g1_t a, g1_t b, g1_t c, uint8_t *msg, int len, bn_t r, bn_t s) {
 	return result;
 }
 
-int cp_cls_ver(g1_t a, g1_t b, g1_t c, uint8_t *msg, int len, g2_t x, g2_t y) {
+int cp_cls_ver(g1_t a, g1_t b, g1_t c, uint8_t *msg, size_t len, g2_t x, g2_t y) {
 	g1_t p[2];
 	g2_t r[2];
 	gt_t e;
@@ -189,7 +189,7 @@ int cp_cli_gen(bn_t t, bn_t u, bn_t v, g2_t x, g2_t y, g2_t z) {
 	return result;
 }
 
-int cp_cli_sig(g1_t a, g1_t A, g1_t b, g1_t B, g1_t c, uint8_t *msg, int len,
+int cp_cli_sig(g1_t a, g1_t A, g1_t b, g1_t B, g1_t c, uint8_t *msg, size_t len,
 		bn_t r, bn_t t, bn_t u, bn_t v) {
 	bn_t m, n;
 	int result = RLC_OK;
@@ -237,7 +237,7 @@ int cp_cli_sig(g1_t a, g1_t A, g1_t b, g1_t B, g1_t c, uint8_t *msg, int len,
 	return result;
 }
 
-int cp_cli_ver(g1_t a, g1_t A, g1_t b, g1_t B, g1_t c, uint8_t *msg, int len,
+int cp_cli_ver(g1_t a, g1_t A, g1_t b, g1_t B, g1_t c, uint8_t *msg, size_t len,
 		bn_t r, g2_t x, g2_t y, g2_t z) {
 	g1_t p[2];
 	g2_t q[2];
@@ -323,7 +323,7 @@ int cp_cli_ver(g1_t a, g1_t A, g1_t b, g1_t B, g1_t c, uint8_t *msg, int len,
 	return result;
 }
 
-int cp_clb_gen(bn_t t, bn_t u, bn_t v[], g2_t x, g2_t y, g2_t z[], int l) {
+int cp_clb_gen(bn_t t, bn_t u, bn_t v[], g2_t x, g2_t y, g2_t z[], size_t l) {
 	bn_t n;
 	int i, result = RLC_OK;
 
@@ -352,7 +352,7 @@ int cp_clb_gen(bn_t t, bn_t u, bn_t v[], g2_t x, g2_t y, g2_t z[], int l) {
 }
 
 int cp_clb_sig(g1_t a, g1_t A[], g1_t b, g1_t B[], g1_t c, uint8_t *msgs[],
-		int lens[], bn_t t, bn_t u, bn_t v[], int l) {
+		size_t lens[], bn_t t, bn_t u, bn_t v[], size_t l) {
 	bn_t m, n;
 	int i, result = RLC_OK;
 
@@ -404,7 +404,7 @@ int cp_clb_sig(g1_t a, g1_t A[], g1_t b, g1_t B[], g1_t c, uint8_t *msgs[],
 }
 
 int cp_clb_ver(g1_t a, g1_t A[], g1_t b, g1_t B[], g1_t c, uint8_t *msgs[],
-		int lens[], g2_t x, g2_t y, g2_t z[], int l) {
+		size_t lens[], g2_t x, g2_t y, g2_t z[], size_t l) {
 	g1_t p[2];
 	g2_t q[2];
 	gt_t e;

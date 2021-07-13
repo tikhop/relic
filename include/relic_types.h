@@ -32,7 +32,9 @@
 #ifndef RLC_TYPES_H
 #define RLC_TYPES_H
 
+#include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "relic_conf.h"
 

@@ -445,7 +445,7 @@ static int ecies(void) {
 	ec_t r;
 	bn_t da, d_b;
 	ec_t qa, q_b;
-	int l, in_len, out_len;
+	size_t l, in_len, out_len;
 	uint8_t in[RLC_BC_LEN - 1], out[RLC_BC_LEN + RLC_MD_LEN];
 
 	ec_null(r);
@@ -857,7 +857,8 @@ end:
 }
 
 static int etrs(void) {
-	int size, code = RLC_ERR;
+	int code = RLC_ERR;
+	size_t size;
 	ec_t pp, pk[4];
 	bn_t sk[4], td[4], y[4];
 	etrs_t ring[4];
@@ -1387,7 +1388,7 @@ static int cls(void) {
 	g2_t x, y, z, zs[4];
 	uint8_t m[5] = { 0, 1, 2, 3, 4 };
 	uint8_t *msgs[5] = {m, m, m, m, m};
-	int lens[5] = {sizeof(m), sizeof(m), sizeof(m), sizeof(m), sizeof(m)};
+	size_t lens[5] = {sizeof(m), sizeof(m), sizeof(m), sizeof(m), sizeof(m)};
 
 	bn_null(r);
 	bn_null(t);
@@ -1773,7 +1774,7 @@ static int lhs(void) {
 	char *data = "database-identifier";
 	char *id[S] = { "Alice", "Bob" };
 	dig_t *f[S] = { NULL };
-	int flen[S];
+	size_t flen[S];
 
 	bn_null(m);
 	bn_null(n);

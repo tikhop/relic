@@ -52,7 +52,8 @@
  */
 static void ep4_mul_sim_plain(ep4_t r, ep4_t p, bn_t k, ep4_t q, bn_t m,
 		ep4_t *t) {
-	int i, l, l0, l1, n0, n1, w, gen;
+	size_t l, l0, l1;
+	int n0, n1, w, gen;
 	int8_t naf0[2 * RLC_FP_BITS + 1], naf1[2 * RLC_FP_BITS + 1], *_k, *_m;
 	ep4_t t0[1 << (EP_WIDTH - 2)];
 	ep4_t t1[1 << (EP_WIDTH - 2)];
@@ -60,7 +61,7 @@ static void ep4_mul_sim_plain(ep4_t r, ep4_t p, bn_t k, ep4_t q, bn_t m,
 	RLC_TRY {
 		gen = (t == NULL ? 0 : 1);
 		if (!gen) {
-			for (i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
+			for (int i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
 				ep4_null(t0[i]);
 				ep4_new(t0[i]);
 			}
@@ -69,7 +70,7 @@ static void ep4_mul_sim_plain(ep4_t r, ep4_t p, bn_t k, ep4_t q, bn_t m,
 		}
 
 		/* Prepare the precomputation table. */
-		for (i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
+		for (int i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
 			ep4_null(t1[i]);
 			ep4_new(t1[i]);
 		}
@@ -90,18 +91,18 @@ static void ep4_mul_sim_plain(ep4_t r, ep4_t p, bn_t k, ep4_t q, bn_t m,
 		_k = naf0 + l - 1;
 		_m = naf1 + l - 1;
 		if (bn_sign(k) == RLC_NEG) {
-			for (i =  0; i < l0; i++) {
+			for (int i = 0; i < l0; i++) {
 				naf0[i] = -naf0[i];
 			}
 		}
 		if (bn_sign(m) == RLC_NEG) {
-			for (i =  0; i < l1; i++) {
+			for (int i = 0; i < l1; i++) {
 				naf1[i] = -naf1[i];
 			}
 		}
 
 		ep4_set_infty(r);
-		for (i = l - 1; i >= 0; i--, _k--, _m--) {
+		for (int i = l - 1; i >= 0; i--, _k--, _m--) {
 			ep4_dbl(r, r);
 
 			n0 = *_k;
@@ -128,11 +129,11 @@ static void ep4_mul_sim_plain(ep4_t r, ep4_t p, bn_t k, ep4_t q, bn_t m,
 	RLC_FINALLY {
 		/* Free the precomputation tables. */
 		if (!gen) {
-			for (i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
+			for (int i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
 				ep4_free(t0[i]);
 			}
 		}
-		for (i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
+		for (int i = 0; i < (1 << (EP_WIDTH - 2)); i++) {
 			ep4_free(t1[i]);
 		}
 	}
@@ -175,7 +176,8 @@ void ep4_mul_sim_trick(ep4_t r, ep4_t p, bn_t k, ep4_t q, bn_t m) {
 	ep4_t t1[1 << (EP_WIDTH / 2)];
 	ep4_t t[1 << EP_WIDTH];
 	bn_t n;
-	int l0, l1, w = EP_WIDTH / 2;
+	size_t l0, l1;
+	int w = EP_WIDTH / 2;
 	uint8_t w0[2 * RLC_FP_BITS], w1[2 * RLC_FP_BITS];
 
 	bn_null(n);
@@ -289,7 +291,8 @@ void ep4_mul_sim_inter(ep4_t r, ep4_t p, bn_t k, ep4_t q, bn_t m) {
 
 void ep4_mul_sim_joint(ep4_t r, ep4_t p, bn_t k, ep4_t q, bn_t m) {
 	ep4_t t[5];
-	int i, l, u_i, offset;
+	int i, u_i, offset;
+	size_t l;
 	int8_t jsf[4 * (RLC_FP_BITS + 1)];
 
 	if (bn_is_zero(k) || ep4_is_infty(p)) {
@@ -392,7 +395,7 @@ void ep4_mul_sim_gen(ep4_t r, bn_t k, ep4_t q, bn_t m) {
 	}
 }
 
-void ep4_mul_sim_dig(ep4_t r, ep4_t p[], dig_t k[], int len) {
+void ep4_mul_sim_dig(ep4_t r, ep4_t p[], dig_t k[], size_t len) {
 	ep4_t t;
 	int max;
 
@@ -428,7 +431,8 @@ void ep4_mul_sim_dig(ep4_t r, ep4_t p[], dig_t k[], int len) {
 
 void ep4_mul_sim_lot(ep4_t r, ep4_t p[], const bn_t k[], int n) {
 	const int len = RLC_FP_BITS + 1;
-	int i, j, m, l, *_l = RLC_ALLOCA(int, 8 * n);
+	int i, j, m;
+	size_t l, *_l = RLC_ALLOCA(size_t, 8 * n);
 	bn_t _k[8], q, x;
 	int8_t *naf = RLC_ALLOCA(int8_t, 8 * n * len);
 

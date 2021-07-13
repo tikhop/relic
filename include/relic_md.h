@@ -134,7 +134,7 @@ enum {
  * @param[in] msg				- the message to hash.
  * @param[in] len				- the message length in bytes.
  */
-void md_map_sh224(uint8_t *hash, const uint8_t *msg, int len);
+void md_map_sh224(uint8_t *hash, const uint8_t *msg, size_t len);
 
 /**
  * Computes the SHA-256 hash function.
@@ -143,7 +143,7 @@ void md_map_sh224(uint8_t *hash, const uint8_t *msg, int len);
  * @param[in] msg				- the message to hash.
  * @param[in] len				- the message length in bytes.
  */
-void md_map_sh256(uint8_t *hash, const uint8_t *msg, int len);
+void md_map_sh256(uint8_t *hash, const uint8_t *msg, size_t len);
 
 /**
  * Computes the SHA-384 hash function.
@@ -152,7 +152,7 @@ void md_map_sh256(uint8_t *hash, const uint8_t *msg, int len);
  * @param[in] msg				- the message to hash.
  * @param[in] len				- the message length in bytes.
  */
-void md_map_sh384(uint8_t *hash, const uint8_t *msg, int len);
+void md_map_sh384(uint8_t *hash, const uint8_t *msg, size_t len);
 
 /**
  * Computes the SHA-512 hash function.
@@ -161,7 +161,7 @@ void md_map_sh384(uint8_t *hash, const uint8_t *msg, int len);
  * @param[in] msg				- the message to hash.
  * @param[in] len				- the message length in bytes.
  */
-void md_map_sh512(uint8_t *hash, const uint8_t *msg, int len);
+void md_map_sh512(uint8_t *hash, const uint8_t *msg, size_t len);
 
 /**
  * Computes the BLAKE2s-160 hash function.
@@ -170,7 +170,7 @@ void md_map_sh512(uint8_t *hash, const uint8_t *msg, int len);
  * @param[in] msg				- the message to hash.
  * @param[in] len				- the message length in bytes.
  */
-void md_map_b2s160(uint8_t *hash, const uint8_t *msg, int len);
+void md_map_b2s160(uint8_t *hash, const uint8_t *msg, size_t len);
 
 /**
  * Computes the BLAKE2s-256 hash function.
@@ -179,7 +179,7 @@ void md_map_b2s160(uint8_t *hash, const uint8_t *msg, int len);
  * @param[in] msg				- the message to hash.
  * @param[in] len				- the message length in bytes.
  */
-void md_map_b2s256(uint8_t *hash, const uint8_t *msg, int len);
+void md_map_b2s256(uint8_t *hash, const uint8_t *msg, size_t len);
 
 /**
  * Derives a key from shared secret material through the standardized KDF2

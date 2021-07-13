@@ -40,7 +40,7 @@ int cp_cmlhs_init(g1_t h) {
 	return RLC_OK;
 }
 
-int cp_cmlhs_gen(bn_t x[], gt_t hs[], int len, uint8_t prf[], int plen,
+int cp_cmlhs_gen(bn_t x[], gt_t hs[], size_t len, uint8_t prf[], size_t plen,
 		bn_t sk, g2_t pk, bn_t d, g2_t y) {
 	g1_t g1;
 	g2_t g2;
@@ -90,7 +90,7 @@ int cp_cmlhs_gen(bn_t x[], gt_t hs[], int len, uint8_t prf[], int plen,
 }
 
 int cp_cmlhs_sig(g1_t sig, g2_t z, g1_t a, g1_t c, g1_t r, g2_t s, bn_t msg,
-		char *data, int label, bn_t x, g1_t h, uint8_t prf[], int plen,
+		char *data, int label, bn_t x, g1_t h, uint8_t prf[], size_t plen,
 		bn_t d, bn_t sk) {
 	bn_t k, m, n;
 	g1_t t;
@@ -169,7 +169,7 @@ int cp_cmlhs_sig(g1_t sig, g2_t z, g1_t a, g1_t c, g1_t r, g2_t s, bn_t msg,
 	return result;
 }
 
-int cp_cmlhs_fun(g1_t a, g1_t c, g1_t as[], g1_t cs[], dig_t f[], int len) {
+int cp_cmlhs_fun(g1_t a, g1_t c, g1_t as[], g1_t cs[], dig_t f[], size_t len) {
 	int result = RLC_OK;
 
 	g1_mul_sim_dig(a, as, f, len);
@@ -178,7 +178,7 @@ int cp_cmlhs_fun(g1_t a, g1_t c, g1_t as[], g1_t cs[], dig_t f[], int len) {
 	return result;
 }
 
-int cp_cmlhs_evl(g1_t r, g2_t s, g1_t rs[], g2_t ss[], dig_t f[], int len) {
+int cp_cmlhs_evl(g1_t r, g2_t s, g1_t rs[], g2_t ss[], dig_t f[], size_t len) {
 	int result = RLC_OK;
 
 	g1_mul_sim_dig(r, rs, f, len);
@@ -189,7 +189,7 @@ int cp_cmlhs_evl(g1_t r, g2_t s, g1_t rs[], g2_t ss[], dig_t f[], int len) {
 
 int cp_cmlhs_ver(g1_t r, g2_t s, g1_t sig[], g2_t z[], g1_t a[], g1_t c[],
 		bn_t msg, char *data, g1_t h, int label[], gt_t *hs[],
-		dig_t *f[], int flen[], g2_t y[], g2_t pk[], int slen) {
+		dig_t *f[], size_t flen[], g2_t y[], g2_t pk[], size_t slen) {
 	g1_t g1;
 	g2_t g2;
 	gt_t e, u, v;
@@ -277,7 +277,7 @@ int cp_cmlhs_ver(g1_t r, g2_t s, g1_t sig[], g2_t z[], g1_t a[], g1_t c[],
 }
 
 void cp_cmlhs_off(gt_t vk, g1_t h, int label[], gt_t *hs[], dig_t *f[],
-		int flen[], g2_t y[], g2_t pk[], int slen) {
+		size_t flen[], g2_t y[], g2_t pk[], size_t slen) {
 	gt_t v;
 
 	gt_null(v);
@@ -300,7 +300,7 @@ void cp_cmlhs_off(gt_t vk, g1_t h, int label[], gt_t *hs[], dig_t *f[],
 }
 
 int cp_cmlhs_onv(g1_t r, g2_t s, g1_t sig[], g2_t z[], g1_t a[], g1_t c[],
-		bn_t msg, char *data, g1_t h, gt_t vk, g2_t y[], g2_t pk[], int slen) {
+		bn_t msg, char *data, g1_t h, gt_t vk, g2_t y[], g2_t pk[], size_t slen) {
 	g1_t g1;
 	g2_t g2;
 	gt_t e, u, v;

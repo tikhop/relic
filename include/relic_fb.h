@@ -538,7 +538,7 @@ int fb_is_zero(const fb_t a);
  * @param[in] bit			- the bit position.
  * @return the bit value.
  */
-int fb_get_bit(const fb_t a, int bit);
+int fb_get_bit(const fb_t a, uint_t bit);
 
 /**
  * Stores a bit in a given position on a binary field element.
@@ -547,7 +547,7 @@ int fb_get_bit(const fb_t a, int bit);
  * @param[in] bit			- the bit position.
  * @param[in] value			- the bit value.
  */
-void fb_set_bit(fb_t a, int bit, int value);
+void fb_set_bit(fb_t a, uint_t bit, int value);
 
 /**
  * Assigns a small positive polynomial to a binary field element.
@@ -565,7 +565,7 @@ void fb_set_dig(fb_t c, dig_t a);
  * @param[in] a				- the binary field element.
  * @return the number of bits.
  */
-int fb_bits(const fb_t a);
+uint_t fb_bits(const fb_t a);
 
 /**
  * Assigns a random value to a binary field element.
@@ -590,7 +590,7 @@ void fb_print(const fb_t a);
  * @throw ERR_NO_VALID		- if the radix is invalid.
  * @return the number of digits in the given radix.
  */
-int fb_size_str(const fb_t a, int radix);
+size_t fb_size_str(const fb_t a, uint_t radix);
 
 /**
  * Reads a binary field element from a string in a given radix. The radix must
@@ -603,7 +603,7 @@ int fb_size_str(const fb_t a, int radix);
  * @throw ERR_NO_VALID		- if the radix is invalid.
  * @throw ERR_NO_BUFFER		- if the string is too long.
  */
-void fb_read_str(fb_t a, const char *str, int len, int radix);
+void fb_read_str(fb_t a, const char *str, size_t len, uint_t radix);
 
 /**
  * Writes a binary field element to a string in a given radix. The radix must
@@ -616,7 +616,7 @@ void fb_read_str(fb_t a, const char *str, int len, int radix);
  * @throw ERR_NO_VALID		- if the radix is invalid.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is insufficient.
  */
-void fb_write_str(char *str, int len, const fb_t a, int radix);
+void fb_write_str(char *str, size_t len, const fb_t a, uint_t radix);
 
 /**
  * Reads a binary field element from a byte vector in big-endian format.
@@ -626,7 +626,7 @@ void fb_write_str(char *str, int len, const fb_t a, int radix);
  * @param[in] len			- the buffer capacity.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not RLC_FP_BYTES.
  */
-void fb_read_bin(fb_t a, const uint8_t *bin, int len);
+void fb_read_bin(fb_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a binary field element to a byte vector in big-endian format.
@@ -636,7 +636,7 @@ void fb_read_bin(fb_t a, const uint8_t *bin, int len);
  * @param[in] a				- the binary field element to write.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is not RLC_FP_BYTES.
  */
-void fb_write_bin(uint8_t *bin, int len, const fb_t a);
+void fb_write_bin(uint8_t *bin, size_t len, const fb_t a);
 
 /**
  * Returns the result of a comparison between two binary field elements.

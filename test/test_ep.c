@@ -1028,8 +1028,8 @@ static int simultaneous(void) {
 			TEST_ASSERT(ep_cmp(p[1], r) == RLC_EQ, end);
 			bn_neg(k[1], k[1]);
 			ep_mul_sim(r, p[0], k[0], p[1], k[1]);
-			ep_mul(p[0], p[0], k[0]);
-			ep_mul(p[1], p[1], k[1]);
+			ep_mul_basic(p[0], p[0], k[0]);
+			ep_mul_basic(p[1], p[1], k[1]);
 			ep_add(p[1], p[1], p[0]);
 			TEST_ASSERT(ep_cmp(p[1], r) == RLC_EQ, end);
 			ep_mul_sim(r, p[0], k[0], p[1], k[1]);
@@ -1040,8 +1040,8 @@ static int simultaneous(void) {
 			bn_add(k[0], k[0], n);
 			bn_add(k[1], k[1], n);
 			ep_mul_sim(r, p[0], k[0], p[1], k[1]);
-			ep_mul(p[0], p[0], k[0]);
-			ep_mul(p[1], p[1], k[1]);
+			ep_mul_basic(p[0], p[0], k[0]);
+			ep_mul_basic(p[1], p[1], k[1]);
 			ep_add(p[1], p[1], p[0]);
 			TEST_ASSERT(ep_cmp(p[1], r) == RLC_EQ, end);
 		} TEST_END;

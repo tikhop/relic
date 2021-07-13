@@ -80,7 +80,8 @@ static inline int fp_sgn0(const fp_t t, bn_t k) {
 /* Public definitions                                                         */
 /*============================================================================*/
 
-void ep_map_dst(ep_t p, const uint8_t *msg, int len, const uint8_t *dst, int dst_len) {
+void ep_map_dst(ep_t p, const uint8_t *msg, size_t len, const uint8_t *dst,
+		size_t dst_len) {
 	bn_t k;
 	fp_t t;
 	ep_t q;
@@ -188,6 +189,6 @@ void ep_map_dst(ep_t p, const uint8_t *msg, int len, const uint8_t *dst, int dst
 	}
 }
 
-void ep_map(ep_t p, const uint8_t *msg, int len) {
+void ep_map(ep_t p, const uint8_t *msg, size_t len) {
 	ep_map_dst(p, msg, len, (const uint8_t *)"RELIC", 5);
 }

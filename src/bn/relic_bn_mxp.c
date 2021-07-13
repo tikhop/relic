@@ -116,7 +116,8 @@ void bn_mxp_basic(bn_t c, const bn_t a, const bn_t b, const bn_t m) {
 
 void bn_mxp_slide(bn_t c, const bn_t a, const bn_t b, const bn_t m) {
 	bn_t tab[RLC_TABLE_SIZE], t, u, r;
-	int i, j, l, w = 1;
+	int i, j, w = 1;
+	size_t l;
 	uint8_t *win = RLC_ALLOCA(uint8_t, bn_bits(b));
 
 	if (win == NULL) {

@@ -790,7 +790,7 @@ void ep_print(const ep_t p);
  * @param[in] pack			- the flag to indicate compression.
  * @return the number of bytes.
  */
-int ep_size_bin(const ep_t a, int pack);
+size_t ep_size_bin(const ep_t a, int pack);
 
 /**
  * Reads a prime elliptic curve point from a byte vector in big-endian format.
@@ -801,7 +801,7 @@ int ep_size_bin(const ep_t a, int pack);
  * @throw ERR_NO_VALID		- if the encoded point is invalid.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is invalid.
  */
-void ep_read_bin(ep_t a, const uint8_t *bin, int len);
+void ep_read_bin(ep_t a, const uint8_t *bin, size_t len);
 
 /**
  * Writes a prime elliptic curve point to a byte vector in big-endian format
@@ -813,7 +813,7 @@ void ep_read_bin(ep_t a, const uint8_t *bin, int len);
  * @param[in] pack			- the flag to indicate point compression.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is invalid.
  */
-void ep_write_bin(uint8_t *bin, int len, const ep_t a, int pack);
+void ep_write_bin(uint8_t *bin, size_t len, const ep_t a, int pack);
 
 /**
  * Negates a prime elliptic curve point.
@@ -1153,7 +1153,7 @@ void ep_mul_sim_joint(ep_t r, const ep_t p, const bn_t k, const ep_t q,
  * @param[out] k			- the integer scalars.
  * @param[out] n			- the number of elements to multiply.
  */
-void ep_mul_sim_lot(ep_t r, ep_t p[], const bn_t k[], int n);
+void ep_mul_sim_lot(ep_t r, ep_t p[], const bn_t k[], size_t n);
 
 /**
  * Multiplies and adds the generator and a prime elliptic curve point
@@ -1175,7 +1175,7 @@ void ep_mul_sim_gen(ep_t r, const bn_t k, const ep_t q, const bn_t m);
  * @param[in] k				- the small scalars.
  * @param[in] len			- the number of points to multiply.
  */
-void ep_mul_sim_dig(ep_t r, const ep_t p[], const dig_t k[], int len);
+void ep_mul_sim_dig(ep_t r, const ep_t p[], const dig_t k[], size_t len);
 
 /**
  * Converts a point to affine coordinates.
@@ -1192,7 +1192,7 @@ void ep_norm(ep_t r, const ep_t p);
  * @param[in] t				- the points to convert.
  * @param[in] n				- the number of points.
  */
-void ep_norm_sim(ep_t *r, const ep_t *t, int n);
+void ep_norm_sim(ep_t *r, const ep_t *t, size_t n);
 
 /**
  * Maps a byte array to a point in a prime elliptic curve.
@@ -1201,7 +1201,7 @@ void ep_norm_sim(ep_t *r, const ep_t *t, int n);
  * @param[in] msg			- the byte array to map.
  * @param[in] len			- the array length in bytes.
  */
-void ep_map(ep_t p, const uint8_t *msg, int len);
+void ep_map(ep_t p, const uint8_t *msg, size_t len);
 
 /**
  * Maps a byte array to a point in a prime elliptic curve using
@@ -1213,8 +1213,8 @@ void ep_map(ep_t p, const uint8_t *msg, int len);
  * @param[in] dst			- the domain separation tag.
  * @param[in] dst_len		- the domain separation tag length in bytes.
  */
-void ep_map_dst(ep_t p, const uint8_t *msg, int len, const uint8_t *dst,
-		int dst_len);
+void ep_map_dst(ep_t p, const uint8_t *msg, size_t len, const uint8_t *dst,
+		size_t dst_len);
 
 /**
  * Maps a byte array to a point in a prime elliptic curve with specified
@@ -1226,8 +1226,8 @@ void ep_map_dst(ep_t p, const uint8_t *msg, int len, const uint8_t *dst,
  * @param[in] dst			- the domain separation tag.
  * @param[in] dst_len		- the domain separation tag length in bytes.
  */
-void ep_map_dst(ep_t p, const uint8_t *msg, int len, const uint8_t *dst,
-		int dst_len);
+void ep_map_dst(ep_t p, const uint8_t *msg, size_t len, const uint8_t *dst,
+		size_t dst_len);
 
 /**
  * Compresses a point.

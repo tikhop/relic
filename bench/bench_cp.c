@@ -296,7 +296,7 @@ static void ecies(void) {
 	ec_t q, r;
 	bn_t d;
 	uint8_t in[10], out[16 + RLC_MD_LEN];
-	int in_len, out_len;
+	size_t in_len, out_len;
 
 	bn_null(d);
 	ec_null(q);
@@ -542,7 +542,7 @@ static void ers(void) {
 }
 
 static void etrs(void) {
-	int size;
+	size_t size;
 	ec_t pp, pk[MAX_KEYS + 1];
 	bn_t sk[MAX_KEYS + 1], td[MAX_KEYS + 1], y[MAX_KEYS + 1];
 	etrs_t ring[MAX_KEYS + 1];
@@ -1066,7 +1066,7 @@ static int cls(void) {
 	g2_t x, y, z, _z[4];
 	uint8_t m[5] = { 0, 1, 2, 3, 4 };
 	uint8_t *msgs[5] = {m, m, m, m, m};
-	int lens[5] = {sizeof(m), sizeof(m), sizeof(m), sizeof(m), sizeof(m)};
+	size_t lens[5] = {sizeof(m), sizeof(m), sizeof(m), sizeof(m), sizeof(m)};
 
 	bn_null(r);
 	bn_null(t);
@@ -1439,7 +1439,7 @@ static void lhs(void) {
 	char *id[S] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 	dig_t ft[S];
 	dig_t *f[S];
-	int flen[S];
+	size_t flen[S];
 
 	bn_null(m);
 	bn_null(n);

@@ -77,8 +77,8 @@ static void ep4_mul_pre_ordin(ep4_t *t, ep4_t p) {
  * @param[in] k					- the integer.
  */
 static void ep4_mul_fix_ordin(ep4_t r, ep4_t *table, bn_t k) {
-	int len, i, n;
-	int8_t naf[2 * RLC_FP_BITS + 1], *t;
+	size_t l;
+	int8_t naf[2 * RLC_FP_BITS + 1];
 
 	if (bn_is_zero(k)) {
 		ep4_set_infty(r);
@@ -86,20 +86,18 @@ static void ep4_mul_fix_ordin(ep4_t r, ep4_t *table, bn_t k) {
 	}
 
 	/* Compute the w-TNAF representation of k. */
-	len = 2 * RLC_FP_BITS + 1;
-	bn_rec_naf(naf, &len, k, EP_DEPTH);
+	l = 2 * RLC_FP_BITS + 1;
+	bn_rec_naf(naf, &l, k, EP_DEPTH);
 
-	t = naf + len - 1;
 	ep4_set_infty(r);
-	for (i = len - 1; i >= 0; i--, t--) {
+	for (int i = l - 1; i >= 0; i--) {
 		ep4_dbl(r, r);
 
-		n = *t;
-		if (n > 0) {
-			ep4_add(r, r, table[n / 2]);
+		if (naf[i] > 0) {
+			ep4_add(r, r, table[naf[i] / 2]);
 		}
-		if (n < 0) {
-			ep4_sub(r, r, table[-n / 2]);
+		if (naf[i] < 0) {
+			ep4_sub(r, r, table[-naf[i] / 2]);
 		}
 	}
 	/* Convert r to affine coordinates. */

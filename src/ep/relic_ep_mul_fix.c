@@ -46,29 +46,27 @@
  * @param[in] k					- the integer.
  */
 static void ep_mul_fix_plain(ep_t r, const ep_t *t, const bn_t k) {
-	int l, i, n;
+	size_t l;
 	int8_t naf[RLC_FP_BITS + 1];
 
 	/* Compute the w-TNAF representation of k. */
 	l = RLC_FP_BITS + 1;
 	bn_rec_naf(naf, &l, k, EP_DEPTH);
 
-	n = naf[l - 1];
-	if (n > 0) {
-		ep_copy(r, t[n / 2]);
+	if (naf[l - 1] > 0) {
+		ep_copy(r, t[naf[l - 1] / 2]);
 	} else {
-		ep_neg(r, t[-n / 2]);
+		ep_neg(r, t[-naf[l - 1] / 2]);
 	}
 
-	for (i = l - 2; i >= 0; i--) {
+	for (int i = l - 2; i >= 0; i--) {
 		ep_dbl(r, r);
 
-		n = naf[i];
-		if (n > 0) {
-			ep_add(r, r, t[n / 2]);
+		if (naf[i] > 0) {
+			ep_add(r, r, t[naf[i] / 2]);
 		}
-		if (n < 0) {
-			ep_sub(r, r, t[-n / 2]);
+		if (naf[i] < 0) {
+			ep_sub(r, r, t[-naf[i] / 2]);
 		}
 	}
 	/* Convert r to affine coordinates. */

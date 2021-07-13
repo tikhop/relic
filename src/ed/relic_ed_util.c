@@ -223,7 +223,7 @@ void ed_print(const ed_t p) {
 	fp_print(p->z);
 }
 
-int ed_size_bin(const ed_t a, int pack) {
+size_t ed_size_bin(const ed_t a, int pack) {
 	int size = 0;
 
 	if (ed_is_infty(a)) {
@@ -238,7 +238,7 @@ int ed_size_bin(const ed_t a, int pack) {
 	return size;
 }
 
-void ed_read_bin(ed_t a, const uint8_t *bin, int len) {
+void ed_read_bin(ed_t a, const uint8_t *bin, size_t len) {
 	if (len == 1) {
 		if (bin[0] == 0) {
 			ed_set_infty(a);
@@ -289,7 +289,7 @@ void ed_read_bin(ed_t a, const uint8_t *bin, int len) {
 #endif
 }
 
-void ed_write_bin(uint8_t *bin, int len, const ed_t a, int pack) {
+void ed_write_bin(uint8_t *bin, size_t len, const ed_t a, int pack) {
 	ed_t t;
 
 	ed_null(t);

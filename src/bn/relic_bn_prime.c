@@ -170,7 +170,7 @@ static void bn_exp(bn_t c, const bn_t a, const bn_t b, const bn_t m) {
 /* Public definitions                                                         */
 /*============================================================================*/
 
-dig_t bn_get_prime(int pos) {
+dig_t bn_get_prime(uint_t pos) {
 	if (pos >= BASIC_TESTS) {
 		return 0;
 	}
@@ -406,7 +406,7 @@ int bn_is_prime_solov(const bn_t a) {
 
 #if BN_GEN == BASIC || !defined(STRIP)
 
-void bn_gen_prime_basic(bn_t a, int bits) {
+void bn_gen_prime_basic(bn_t a, uint_t bits) {
 	while (1) {
 		do {
 			bn_rand(a, RLC_POS, bits);
@@ -421,7 +421,7 @@ void bn_gen_prime_basic(bn_t a, int bits) {
 
 #if BN_GEN == SAFEP || !defined(STRIP)
 
-void bn_gen_prime_safep(bn_t a, int bits) {
+void bn_gen_prime_safep(bn_t a, uint_t bits) {
 	while (1) {
 		do {
 			bn_rand(a, RLC_POS, bits);
@@ -445,7 +445,7 @@ void bn_gen_prime_safep(bn_t a, int bits) {
 
 #if BN_GEN == STRON || !defined(STRIP)
 
-void bn_gen_prime_stron(bn_t a, int bits) {
+void bn_gen_prime_stron(bn_t a, uint_t bits) {
 	dig_t i, j;
 	int found, k;
 	bn_t r, s, t;

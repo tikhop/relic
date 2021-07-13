@@ -53,7 +53,7 @@ static void pp_mil_k8(fp8_t r, ep2_t *t, ep2_t *q, ep_t *p, int m, bn_t a) {
 	fp8_t l;
 	ep_t *_p = RLC_ALLOCA(ep_t, m);
 	ep2_t *_q = RLC_ALLOCA(ep2_t, m);
-	int i, j, len = bn_bits(a) + 1;
+	size_t len = bn_bits(a) + 1;
 	int8_t s[RLC_FP_BITS + 1];
 
 	if (m == 0) {
@@ -68,7 +68,7 @@ static void pp_mil_k8(fp8_t r, ep2_t *t, ep2_t *q, ep_t *p, int m, bn_t a) {
 			RLC_THROW(ERR_NO_MEMORY);
 		}
 
-		for (j = 0; j < m; j++) {
+		for (int j = 0; j < m; j++) {
 			ep_null(_p[j]);
 			ep2_null(_q[j]);
 			ep_new(_p[j]);
@@ -86,9 +86,9 @@ static void pp_mil_k8(fp8_t r, ep2_t *t, ep2_t *q, ep_t *p, int m, bn_t a) {
 
 		fp8_zero(l);
 		bn_rec_naf(s, &len, a, 2);
-		for (i = len - 2; i >= 0; i--) {
+		for (int i = len - 2; i >= 0; i--) {
 			fp8_sqr(r, r);
-			for (j = 0; j < m; j++) {
+			for (int j = 0; j < m; j++) {
 				pp_dbl_k8(l, t[j], t[j], _p[j]);
 				fp8_mul(r, r, l);
 				if (s[i] > 0) {
@@ -107,7 +107,7 @@ static void pp_mil_k8(fp8_t r, ep2_t *t, ep2_t *q, ep_t *p, int m, bn_t a) {
 	}
 	RLC_FINALLY {
 		fp8_free(l);
-		for (j = 0; j < m; j++) {
+		for (int j = 0; j < m; j++) {
 			ep_free(_p[j]);
 			ep2_free(_q[j]);
 		}
