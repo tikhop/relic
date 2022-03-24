@@ -135,7 +135,7 @@ char util_conv_char(dig_t i) {
 }
 
 int util_bits_dig(dig_t a) {
-    return RLC_DIG - arch_lzcnt(a);
+    return RLC_DIG - __builtin_clzll(a);
 }
 
 int util_cmp_const(const void *a, const void *b, int size) {

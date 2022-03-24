@@ -105,9 +105,5 @@ ull_t arch_cycles(void) {
 }
 
 unsigned int arch_lzcnt(unsigned int x) {
-#ifdef WSIZE == 32
-	return lzcnt32_gcc_arm(x);
-#elif WSIZE == 64
-	return lzcnt64_gcc_arm(x);
-#endif
+    return lzcnt64_hard(x);
 }
